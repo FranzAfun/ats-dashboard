@@ -197,6 +197,22 @@ A feature may contain its own:
 Do not force every tiny component into a feature folder if it is
 genuinely reusable.
 
+### Implemented feature folders
+
+```text
+features/
+├── admin/       users, roles/permissions, feature flags
+├── alerts/      alarm list, live alarm banner, ordering
+├── dashboard/   overview panels, power-flow diagram, feature sections
+├── financial/   cost trend chart, financial panels
+├── hmi/         source change, input cost/day, command feedback
+├── power/       telemetry cards
+└── shared/      source state, freshness/connection notices, share bar
+```
+
+Authentication-related services live in `services/auth/`; no
+`features/auth/` folder is needed until a login flow exists.
+
 ## `src/hooks/`
 
 Reusable React hooks.

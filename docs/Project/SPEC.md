@@ -1020,3 +1020,41 @@ Tailwind's default breakpoints are used:
 -   Standard: 200ms, ease-out — drawers, panels and menus.
 -   Under `prefers-reduced-motion: reduce`, transitions are removed and
     the end state is shown immediately.
+
+------------------------------------------------------------------------
+
+# 25. Implemented Motion System
+
+  Motion                       Where                        Reduced motion
+  ---------------------------- ---------------------------- -------------------------
+  Power-flow energy movement   Dashboard power-flow diagram Static path + arrow
+  (moving dashes, only on the  (`features/dashboard/`)
+  active path while live)
+  Page enter (200ms fade/rise) Every route change           Removed
+  Alarm banner enter           Live alarm banner            Removed
+  Drawer slide (200ms)         Mobile navigation drawer     Removed
+  Dialog enter                 HMI confirmation dialogs     Removed
+  Color/tone transitions       Buttons, links, switches,    Removed
+  (150ms)                      segmented controls
+  Thinking Orbs                Meaningful waits only        Static frame (library)
+
+Thinking Orbs mapping used (`components/LoadingState.jsx`, theme pinned
+to dark):
+
+  Orb state      Used for
+  -------------- ---------------------------------------------------
+  `connecting`   Session load, connecting to the ATS (system status)
+  `listening`    Waiting for live electrical telemetry
+  `searching`    Retrieving alarms, users and other lists
+  `solving`      Calculating financial analytics
+  `working`      HMI command processing (pending/accepted)
+
+No artificial delays are added for visual effect. In mock mode the mock
+adapter simulates network latency (~350 ms) so loading states are
+exercised realistically; live timing depends on the integration.
+
+Transition patterns are implemented as small Tailwind/CSS transitions
+in this project's own visual system, following the Transitions.dev
+categories (page entry, modal open, panel reveal, toggles); no
+Transitions.dev code or branding is copied. Continuous motion is
+limited to the power-flow visualization.

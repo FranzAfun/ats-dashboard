@@ -382,3 +382,30 @@ A milestone is complete when:
     decision.
 -   The Git diff contains only the intended work.
 -   The change is committed separately.
+
+## Implementation Status (Frontend)
+
+  Phase                                   Status
+  --------------------------------------- ------------------------------------------
+  0 Documentation and baseline            Done
+  1 Existing-system confirmation          Open — requires the ATS/Node-RED owner
+  2 Frontend foundation                   Done
+  3 Access and mock data foundation       Done (mock access backend)
+  4 Motion and interaction foundation     Done (SPEC.md §25)
+  5 Dashboard                             Done with mock data
+  6 Power parameters                      Done with mock data (no trend charts:
+                                          historical telemetry source TBD)
+  7 Condition awareness                   Done with mock data
+  8 Financial analytics                   Done with mock/demo calculations
+  9 HMI controls                          Done against the mock command adapter
+  10 Admin module                         Done against the mock access backend
+                                          (no user creation/audit: auth TBD)
+  11 Live integration                     Blocked — transport, payloads, commands
+                                          and authentication are not confirmed
+  12 Testing and hardening                Done for the frontend: unit tests,
+                                          smoke tests, responsive/a11y checks
+  13 Deployment                           Prepared (`netlify.toml`); production
+                                          deployment waits on Phase 11
+
+Everything that depends on the real ATS/Node-RED system is isolated
+behind `src/services/integration/` and marked TBD in the documentation.

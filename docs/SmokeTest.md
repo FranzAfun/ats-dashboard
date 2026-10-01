@@ -21,6 +21,13 @@ npm run dev
 
 Use mock data until live integration is confirmed.
 
+## Current Implementation Status
+
+All pages are implemented against the mock adapter. Every smoke test in
+this document can be run in development (`npm run dev`). Live
+integration is not implemented; ST-037 covers the behavior of a live
+build without an integration.
+
 ## Mock Users
 
 In development the application uses the mock adapter. A "Mock data"

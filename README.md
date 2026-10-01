@@ -289,6 +289,20 @@ Remaining deployment dependencies (TBD):
 
 ---
 
+## Implementation Status
+
+The frontend is implemented end-to-end against the **mock** integration adapter:
+
+- Responsive shell, routing, page/action/feature access control, mock users and an admin-managed access model
+- Dashboard (system overview, source status, tariff, temperature, animated power flow, feature-gated sections)
+- Power parameters, condition awareness (alarm banner and alerts), financial analytics with export, HMI controls with confirmation and command feedback, administration
+- Loading, empty, error, stale and disconnected states; reduced-motion support
+- Unit tests (`npm test`) and manual smoke tests (`docs/SmokeTest.md`)
+
+Not implemented because the information is not confirmed yet: the live integration adapter (transport, payloads, commands), real authentication/authorization, historical storage, production financial rules, alarm definitions and production thresholds. See `docs/Project/09_DEVELOPMENT_ROADMAP.md` (Implementation Status).
+
+---
+
 ## Documentation
 
 - Agent guidance (root [`CLAUDE.md`](CLAUDE.md) points here): [`docs/Agents/CLAUDE.md`](docs/Agents/CLAUDE.md), [`docs/Agents/10_AGENT_INSTRUCTIONS.md`](docs/Agents/10_AGENT_INSTRUCTIONS.md)
