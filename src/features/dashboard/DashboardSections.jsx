@@ -11,6 +11,7 @@ import { useAsyncData } from '../../hooks/useAsyncData.js'
 import { useAlarms, usePowerTelemetry } from '../../hooks/useTelemetry.js'
 import { analyticsService } from '../../services/analytics/analyticsService.js'
 import { formatCurrency, formatDateTime, formatNumber, formatPower } from '../../utils/format.js'
+import ConnectionNotice from '../shared/ConnectionNotice.jsx'
 import SourceShareBar from '../shared/SourceShareBar.jsx'
 
 const linkClass =
@@ -49,7 +50,12 @@ export function AlertsSummarySection() {
         {(list) => {
           const active = list.filter((a) => a.active)
           if (active.length === 0) {
-            return <StatusIndicator tone="ok" label="No active alarms" />
+            return (
+              <div className="grid gap-3">
+                <ConnectionNotice subject="The alarm summary" />
+                <StatusIndicator tone="ok" label="No active alarms" />
+              </div>
+            )
           }
           return (
             <ul className="grid gap-2">

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import StatusIndicator from '../../components/StatusIndicator.jsx'
 import { paths } from '../../config/paths.js'
-import { useAlarms } from '../../hooks/useTelemetry.js'
+import { useAlarms, useConnectionState } from '../../hooks/useTelemetry.js'
 import { severityLabel, sortAlarms } from './alarmPresentation.js'
 
 /**
@@ -12,6 +12,7 @@ import { severityLabel, sortAlarms } from './alarmPresentation.js'
 function LiveAlarmBanner() {
   const alarms = useAlarms()
   const { pathname } = useLocation()
+  const connection = useConnectionState()
   const active = alarms.status === 'ready' ? sortAlarms(alarms.data.filter((a) => a.active)) : []
 
   return (
@@ -25,6 +26,9 @@ function LiveAlarmBanner() {
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
             <p className="text-sm font-semibold text-text">
               {active.length === 1 ? '1 active alarm' : `${active.length} active alarms`}
+              {!['connected', 'connecting'].includes(connection) && (
+                <span className="ml-2 font-normal text-warning">(last known — not live)</span>
+              )}
             </p>
             {pathname !== paths.alerts && (
               <Link

@@ -546,6 +546,8 @@ Select "Mock Disabled User".
     live.
 -   Step 3: the connection status shows "Disconnected" and telemetry is
     marked as disconnected.
+-   Step 3: the Alerts page, alarm summary and alarm banner state that
+    alarm information may be out of date ("not live").
 -   Step 4: the status returns to "Connected" and data is live again.
 
 ------------------------------------------------------------------------

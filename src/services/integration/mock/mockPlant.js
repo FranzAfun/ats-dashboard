@@ -300,6 +300,12 @@ export function createMockPlant() {
       if (channel === 'control') onData(buildControlState(now))
     } else if (scenario() === 'error') {
       onError?.(integrationError())
+    } else if (scenario() === 'disconnected') {
+      // Last received values may still be shown (marked not live);
+      // without any data the subscriber gets a connection error.
+      const last = channel === 'status' ? state.lastStatus : channel === 'power' ? state.lastPower : null
+      if (last) onData(last)
+      else onError?.(new IntegrationError(ErrorCode.NETWORK_ERROR, 'The ATS integration is disconnected.'))
     }
     return () => {
       channels[channel].delete(entry)

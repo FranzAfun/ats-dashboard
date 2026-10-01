@@ -5,6 +5,7 @@ import PageHeader from '../components/PageHeader.jsx'
 import SegmentedControl from '../components/SegmentedControl.jsx'
 import AlarmList from '../features/alerts/AlarmList.jsx'
 import { sortAlarms } from '../features/alerts/alarmPresentation.js'
+import ConnectionNotice from '../features/shared/ConnectionNotice.jsx'
 import { useAlarms } from '../hooks/useTelemetry.js'
 
 const emptyMessages = {
@@ -32,6 +33,7 @@ function AlertsPage() {
           )
           return (
             <div className="grid gap-4">
+              <ConnectionNotice subject="The alarm list" />
               <SegmentedControl
                 label="Alarm filter"
                 value={filter}
