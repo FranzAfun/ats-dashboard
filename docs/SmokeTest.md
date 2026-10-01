@@ -589,6 +589,23 @@ Select "Mock Disabled User".
 
 ------------------------------------------------------------------------
 
+## ST-030: Power Parameters and Missing Values
+
+### Steps
+
+1.  As "Mock Viewer", open Power.
+2.  Select the "Missing / empty data" scenario.
+
+### Expected Result
+
+-   Load, Solar, Ghana Utility/Grid and Generator cards show voltage,
+    current, power, energy, frequency and power factor with units.
+-   Each source card shows its status (Active, Standby, Unavailable).
+-   In step 2, fields the system does not provide are shown as "—"
+    (announced as "Unavailable"), never as 0.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:
