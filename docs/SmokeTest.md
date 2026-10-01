@@ -21,6 +21,16 @@ npm run dev
 
 Use mock data until live integration is confirmed.
 
+## Current Implementation Status
+
+The application foundation (responsive shell, navigation and routing)
+is implemented. Page content, the access model, mock data, and
+animation are not implemented yet.
+
+Until the access model is implemented, every navigation item is shown
+to every user. The access tests (ST-004 to ST-007, ST-013, ST-019 and
+ST-020) cannot be run yet.
+
 ------------------------------------------------------------------------
 
 ## ST-001: Application Starts
@@ -393,6 +403,74 @@ Use a non-admin account.
 
 -   Admin-only navigation is unavailable.
 -   Direct access is protected.
+
+------------------------------------------------------------------------
+
+## ST-021: Root URL Opens Dashboard
+
+### Steps
+
+1.  Open the application root URL (`/`).
+
+### Expected Result
+
+-   The browser is redirected to `/dashboard`.
+-   The Dashboard page heading is shown.
+-   The browser tab title reads "Dashboard · ATS Dashboard".
+
+------------------------------------------------------------------------
+
+## ST-022: Unknown Route
+
+### Steps
+
+1.  Open a URL that does not exist, for example `/does-not-exist`.
+2.  Select "Go to Dashboard".
+
+### Expected Result
+
+-   A "Page not found" page is shown inside the application shell.
+-   Navigation remains available.
+-   "Go to Dashboard" opens the Dashboard.
+
+------------------------------------------------------------------------
+
+## ST-023: Mobile Navigation Drawer
+
+### Prerequisite
+
+Use a viewport narrower than 1024px.
+
+### Steps
+
+1.  Select the menu button in the top bar.
+2.  Select a navigation item.
+3.  Open the drawer again and press Escape.
+4.  Open the drawer again and tap the dimmed area outside it.
+
+### Expected Result
+
+-   The drawer opens and keyboard focus moves into it.
+-   The page behind the drawer cannot be scrolled or focused.
+-   Selecting a navigation item opens the page and closes the drawer.
+-   Escape and tapping outside both close the drawer.
+-   After closing, focus returns to the menu button.
+-   The active page is marked in the drawer.
+
+------------------------------------------------------------------------
+
+## ST-024: Skip to Content
+
+### Steps
+
+1.  Open any page.
+2.  Press Tab once.
+3.  Press Enter.
+
+### Expected Result
+
+-   A "Skip to content" link becomes visible on the first Tab.
+-   Pressing Enter moves focus to the main content area.
 
 ------------------------------------------------------------------------
 

@@ -1,9 +1,8 @@
+import { RouterProvider } from 'react-router-dom'
+import { router } from './routes/router.js'
+
 function App() {
-  return (
-    <main className="flex min-h-svh items-center justify-center p-4">
-      <h1 className="text-2xl font-semibold">ATS Dashboard</h1>
-    </main>
-  )
+  return <RouterProvider router={router} />
 }
 
 export default App

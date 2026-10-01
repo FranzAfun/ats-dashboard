@@ -195,7 +195,7 @@ UI visibility is not considered a security boundary. Authorization must also be 
 | JavaScript (no TypeScript) | In use |
 | ESLint | Configured (`npm run lint`) |
 | Tailwind CSS 4 | Configured via `@tailwindcss/vite` (`src/styles/index.css`) |
-| React Router 7 | Installed, not yet configured |
+| React Router 7 | Configured (`src/routes/router.js`) |
 
 ### Animation
 

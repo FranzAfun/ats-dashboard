@@ -1,1 +1,40 @@
 @import 'tailwindcss';
+
+/*
+ * Design tokens. Values and rationale: docs/Project/SPEC.md Section 24.
+ * The default Tailwind palette is removed so components can only use
+ * the documented tokens.
+ */
+@theme {
+  --color-*: initial;
+
+  --color-canvas: #0f1417;
+  --color-surface: #161c20;
+  --color-raised: #1d252a;
+  --color-border: #2b353c;
+  --color-control: #64727c;
+  --color-text: #e7ecef;
+  --color-muted: #a3afb8;
+  --color-subtle: #8794a0;
+
+  --color-accent: #5aa2e6;
+
+  --color-ok: #3fb27f;
+  --color-warning: #e0a43a;
+  --color-critical: #ef6461;
+  --color-info: #5aa2e6;
+  --color-offline: #8794a0;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-canvas);
+    color: var(--color-text);
+  }
+
+  /* Prevent the page behind the mobile navigation drawer from scrolling. */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+}
