@@ -949,6 +949,22 @@ administrative read and write and rejects unauthorized calls with
 account or their own role's permissions, so the mock cannot lock itself
 out. A production backend must enforce authorization independently.
 
+### Administration module (implemented against the mock backend)
+
+  Section               View permission            Manage permission
+  --------------------- -------------------------- ----------------------------
+  Users                 `admin.users.view`         `admin.users.manage` (role,
+                                                   enable/disable)
+  Per-user features     `admin.users.view`         `admin.features.manage`
+                                                   (grant/revoke/role default)
+  Effective access      `admin.users.view`         —
+  Roles & permissions   `admin.permissions.view`   `admin.permissions.manage`
+  Feature flags         `admin.features.view`      `admin.features.manage`
+
+User creation, password handling and audit logging are not implemented:
+they depend on the authentication provider and audit requirements, which
+are TBD.
+
 ### Mock users
 
   User                         Role       Purpose

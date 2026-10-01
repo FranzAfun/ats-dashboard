@@ -614,9 +614,9 @@ Select "Mock Disabled User".
 2.  Open the Dashboard, then the Alerts page.
 3.  Switch the alert filter between Active, Cleared and All.
 4.  Select "Normal operation".
-5.  Switch to "Mock HMI Observer" with "Active alarms" selected, then
-    revoke the Alerts feature for that user in Administration (or use a
-    user without Alerts access).
+5.  As "Mock Administrator", revoke the Alerts feature for "Mock
+    Viewer" in Administration → Users, then switch to "Mock Viewer"
+    with "Active alarms" selected.
 
 ### Expected Result
 
@@ -711,6 +711,35 @@ real devices.
     value becomes GHS 99.50.
 -   "Mock HMI Observer" sees the HMI status but neither control, with
     the note "No HMI actions are assigned to your account."
+
+------------------------------------------------------------------------
+
+## ST-036: Administration Management
+
+### Prerequisite
+
+"Mock Administrator". Mock admin changes reset on page reload.
+
+### Steps
+
+1.  Open Administration → Feature flags and turn "Financial Analytics"
+    off, then on again.
+2.  Open Users, select "Mock Viewer", set "Alerts" to "Revoked".
+3.  Open Roles & permissions, select "Viewer", clear "View power
+    parameters".
+4.  Switch to "Mock Viewer".
+5.  Switch back to "Mock Administrator" and select your own user.
+
+### Expected Result
+
+-   Step 1: Financial disappears from navigation while the flag is off
+    and returns when it is on.
+-   Step 2: the user's effective access shows "Alerts (off)".
+-   Step 4: the viewer's navigation shows Dashboard and Financial only.
+-   Step 5: "You cannot change your own access" is shown and no
+    account or feature controls are offered for yourself; the Admin role
+    cannot be edited by its own members.
+-   Users without `admin.view` never see Administration (ST-020).
 
 ------------------------------------------------------------------------
 
