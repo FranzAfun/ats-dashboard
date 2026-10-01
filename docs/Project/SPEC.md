@@ -944,13 +944,29 @@ of an interactive control.
 
 ### Source Identity Colors
 
-Solar, grid and generator need distinct identity colors for charts and
-the power-flow visualization. Their values are TBD and will be defined
-with the first chart or power-flow implementation.
+  Token               Value       Source
+  ------------------- ----------- ------------------
+  `source-solar`      `#c98500`   Solar
+  `source-grid`       `#3987e5`   Ghana Utility/Grid
+  `source-generator`  `#d55181`   Generator
 
-Rule: source identity colors must stay distinguishable from the
-`ok`, `warning` and `critical` status colors so that a source series is
-never mistaken for an alarm.
+Validated as a three-color categorical set on `surface` with the
+data-visualization palette validator (all pairs, dark mode): every
+check passes; worst color-vision-deficiency separation ΔE 13.2, worst
+normal-vision separation ΔE 19.3, all at least 3:1 against `surface`.
+The fixed order is solar, grid, generator everywhere.
+
+Measured limitation: with green, amber, red and blue taken by status and
+interaction, no available hue is fully separated from every status
+color. Solar vs `warning` measures ΔE 8.9 and generator vs `critical`
+ΔE 8.8 (below the 15 normal-vision floor). Therefore:
+
+-   a source color is always paired with the source name (legend, direct
+    label or text);
+-   a status color is always paired with its label and shape
+    (`StatusIndicator`);
+-   status colors are never used as series colors and source colors are
+    never used to indicate status.
 
 ## 24.5 Typography
 

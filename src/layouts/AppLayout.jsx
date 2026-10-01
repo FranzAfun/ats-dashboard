@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import BrandMark from '../components/BrandMark.jsx'
 import { buttonClasses } from '../components/buttonClasses.js'
 import ConnectionStatus from '../components/ConnectionStatus.jsx'
@@ -16,6 +16,7 @@ import SessionBoundary from './SessionBoundary.jsx'
  */
 function AppLayout() {
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const { pathname } = useLocation()
   const closeDrawer = useCallback(() => setDrawerOpen(false), [])
 
   return (
@@ -74,7 +75,9 @@ function AppLayout() {
       <main id="main-content" tabIndex={-1} className="focus:outline-none lg:pl-60">
         <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           <SessionBoundary>
-            <Outlet />
+            <div key={pathname} className="animate-enter motion-reduce:animate-none">
+              <Outlet />
+            </div>
           </SessionBoundary>
         </div>
       </main>
