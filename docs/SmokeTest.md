@@ -606,6 +606,31 @@ Select "Mock Disabled User".
 
 ------------------------------------------------------------------------
 
+## ST-031: Alerts Page and Alarm Banner
+
+### Steps
+
+1.  As "Mock Viewer", select the "Active alarms" scenario.
+2.  Open the Dashboard, then the Alerts page.
+3.  Switch the alert filter between Active, Cleared and All.
+4.  Select "Normal operation".
+5.  Switch to "Mock HMI Observer" with "Active alarms" selected, then
+    revoke the Alerts feature for that user in Administration (or use a
+    user without Alerts access).
+
+### Expected Result
+
+-   A banner above the page content lists the active alarms with
+    severity text and shape (not color alone) and a "View alerts" link.
+-   The banner does not cover any controls or telemetry.
+-   Active alarms are listed first, critical before warning.
+-   Each filter shows its count; an empty filter shows an empty state.
+-   After step 4 the banner disappears and "Active" shows "No active
+    alarms".
+-   Users without Alerts access see neither the banner nor the page.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:

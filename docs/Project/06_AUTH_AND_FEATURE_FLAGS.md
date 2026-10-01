@@ -922,6 +922,13 @@ backend. Production authentication and authorization remain TBD.
     area it belongs to (export requires `financialAnalytics` and
     `dataExport`).
 
+### Application-wide elements
+
+The live alarm banner shown above every page is part of the Alerts
+feature. It requires the same access as the Alerts page (`alerts.view`
+and the `alerts` feature), so users without Alerts access do not receive
+alarm data through the banner.
+
 ### Mock inheritance model (development only)
 
 ``` text

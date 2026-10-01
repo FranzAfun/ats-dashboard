@@ -7,6 +7,8 @@ import MockDataBadge from '../components/dev/MockDataBadge.jsx'
 import NavigationDrawer from '../components/navigation/NavigationDrawer.jsx'
 import NavigationList from '../components/navigation/NavigationList.jsx'
 import ShellPanel from '../components/navigation/ShellPanel.jsx'
+import RequireSection from '../components/access/RequireSection.jsx'
+import LiveAlarmBanner from '../features/alerts/LiveAlarmBanner.jsx'
 import SessionBoundary from './SessionBoundary.jsx'
 
 /**
@@ -75,6 +77,9 @@ function AppLayout() {
       <main id="main-content" tabIndex={-1} className="focus:outline-none lg:pl-60">
         <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           <SessionBoundary>
+            <RequireSection section="alerts">
+              <LiveAlarmBanner />
+            </RequireSection>
             <div key={pathname} className="animate-enter motion-reduce:animate-none">
               <Outlet />
             </div>
