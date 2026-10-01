@@ -2,8 +2,9 @@ import { createStore } from './store.js'
 
 /**
  * Light/dark theme. A saved choice wins; without one the operating-system
- * preference is followed live. Dark is used when the system expresses no
- * preference. The initial value is applied before first paint by
+ * `prefers-color-scheme` is followed live (browsers report "light" when
+ * the system has no explicit setting). The initial value is applied
+ * before first paint by
  * public/theme-init.js (same storage key and rules).
  */
 const STORAGE_KEY = 'ats-dashboard.theme'
