@@ -860,10 +860,12 @@ The integration boundary is implemented in `src/services/integration/`:
   `mock/`                      Mock adapter (development/demo only)
   `live/liveAdapter.js`        Live adapter placeholder — NOT IMPLEMENTED
 
-`VITE_DATA_SOURCE` selects the adapter (`mock` or `live`). Development
-defaults to `mock`; production builds default to `live`, so mock data
-never silently becomes production data. The mock adapter is always
-indicated in the UI with a "Mock data" badge.
+`VITE_DATA_SOURCE` selects the adapter (`mock` or `live`) at build time
+(`vite.config.js` defines the `__DATA_SOURCE__` constant). The
+development server defaults to `mock`; builds default to `live`, so mock
+data never silently becomes production data. Live builds do not contain
+the mock adapter or any mock data. The mock adapter is always indicated
+in the UI with a "Mock data" badge.
 
 The live adapter rejects every call with `NOT_CONFIGURED`. The UI then
 shows "not configured" states instead of data. No transport, endpoint,

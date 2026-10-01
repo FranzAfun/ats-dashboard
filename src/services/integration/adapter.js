@@ -1,6 +1,5 @@
-import { dataSource, dataSourceConfigError } from '../../config/app.config.js'
+import { dataSourceConfigError } from '../../config/app.config.js'
 import { createLiveAdapter } from './live/liveAdapter.js'
-import { createMockAdapter } from './mock/mockAdapter.js'
 
 /**
  * Integration adapter boundary.
@@ -30,13 +29,19 @@ import { createMockAdapter } from './mock/mockAdapter.js'
  * mockScenario: development scenario controls (mock only, otherwise null)
  *
  * UI code must not import adapters directly; it uses the services.
+ *
+ * Live builds do not contain the mock adapter or mock data.
  */
 
 if (dataSourceConfigError) {
   console.error(dataSourceConfigError)
 }
 
+// `__DATA_SOURCE__` is a build-time constant (vite.config.js), so the mock
+// branch — and all mock data — is removed from live builds.
 export const adapter =
-  dataSource === 'mock' ? createMockAdapter() : createLiveAdapter()
+  __DATA_SOURCE__ === 'mock'
+    ? (await import('./mock/mockAdapter.js')).createMockAdapter()
+    : createLiveAdapter()
 
 export const isMockData = adapter.kind === 'mock'

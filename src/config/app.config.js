@@ -1,25 +1,22 @@
 /**
- * Application configuration derived from Vite environment variables.
+ * Application configuration.
  *
- * VITE_DATA_SOURCE selects the integration adapter:
+ * VITE_DATA_SOURCE selects the integration adapter at build time
+ * (see vite.config.js):
  *   - "mock": development/demo data from src/data/mock (never production data)
  *   - "live": the production integration adapter (transport TBD, see
  *             docs/Project/07_INTEGRATION_PLAN.md)
  *
- * When unset, development builds use "mock" and production builds use
- * "live", so a production build never silently shows mock data.
+ * When unset, the development server uses "mock" and builds use "live",
+ * so a production build never silently shows mock data. Live builds do
+ * not contain the mock adapter or mock data.
  */
-const DATA_SOURCES = ['mock', 'live']
+export const dataSource = __DATA_SOURCE__
 
 const requestedSource = import.meta.env.VITE_DATA_SOURCE
-const defaultSource = import.meta.env.DEV ? 'mock' : 'live'
-
-export const dataSource = DATA_SOURCES.includes(requestedSource)
-  ? requestedSource
-  : defaultSource
 
 export const dataSourceConfigError =
-  requestedSource !== undefined && !DATA_SOURCES.includes(requestedSource)
+  requestedSource !== undefined && !['mock', 'live'].includes(requestedSource)
     ? `Unsupported VITE_DATA_SOURCE "${requestedSource}". Expected "mock" or "live".`
     : null
 

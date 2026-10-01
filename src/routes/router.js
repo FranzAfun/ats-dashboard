@@ -1,15 +1,13 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import { paths } from '../config/paths.js'
 import AppLayout from '../layouts/AppLayout.jsx'
-import AdminPage from '../pages/AdminPage.jsx'
-import AlertsPage from '../pages/AlertsPage.jsx'
-import DashboardPage from '../pages/DashboardPage.jsx'
-import FinancialPage from '../pages/FinancialPage.jsx'
-import HmiPage from '../pages/HmiPage.jsx'
 import NotFoundPage from '../pages/NotFoundPage.jsx'
-import PowerPage from '../pages/PowerPage.jsx'
 import PageAccessGuard from './PageAccessGuard.jsx'
 import RouteErrorBoundary from './RouteErrorBoundary.jsx'
+import RouteLoading from './RouteLoading.jsx'
+
+/** Route-level code splitting: each page is loaded on first visit. */
+const page = (load) => async () => ({ Component: (await load()).default })
 
 /*
  * Each protected route declares `handle.pageId`; PageAccessGuard checks it
@@ -20,6 +18,7 @@ export const router = createBrowserRouter([
     path: '/',
     Component: AppLayout,
     ErrorBoundary: RouteErrorBoundary,
+    HydrateFallback: RouteLoading,
     children: [
       {
         // Pathless route so page errors render inside the application shell.
@@ -27,12 +26,36 @@ export const router = createBrowserRouter([
         ErrorBoundary: RouteErrorBoundary,
         children: [
           { index: true, loader: () => redirect(paths.dashboard) },
-          { path: paths.dashboard, Component: DashboardPage, handle: { pageId: 'dashboard' } },
-          { path: paths.power, Component: PowerPage, handle: { pageId: 'power' } },
-          { path: paths.financial, Component: FinancialPage, handle: { pageId: 'financial' } },
-          { path: paths.alerts, Component: AlertsPage, handle: { pageId: 'alerts' } },
-          { path: paths.hmi, Component: HmiPage, handle: { pageId: 'hmi' } },
-          { path: paths.admin, Component: AdminPage, handle: { pageId: 'admin' } },
+          {
+            path: paths.dashboard,
+            handle: { pageId: 'dashboard' },
+            lazy: page(() => import('../pages/DashboardPage.jsx')),
+          },
+          {
+            path: paths.power,
+            handle: { pageId: 'power' },
+            lazy: page(() => import('../pages/PowerPage.jsx')),
+          },
+          {
+            path: paths.financial,
+            handle: { pageId: 'financial' },
+            lazy: page(() => import('../pages/FinancialPage.jsx')),
+          },
+          {
+            path: paths.alerts,
+            handle: { pageId: 'alerts' },
+            lazy: page(() => import('../pages/AlertsPage.jsx')),
+          },
+          {
+            path: paths.hmi,
+            handle: { pageId: 'hmi' },
+            lazy: page(() => import('../pages/HmiPage.jsx')),
+          },
+          {
+            path: paths.admin,
+            handle: { pageId: 'admin' },
+            lazy: page(() => import('../pages/AdminPage.jsx')),
+          },
           { path: '*', Component: NotFoundPage },
         ],
       },
