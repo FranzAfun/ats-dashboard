@@ -250,6 +250,7 @@ npm ci
 | `npm run build` | Create a production build in `dist/` |
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | Run ESLint |
+| `npm test` | Run unit tests (Vitest) |
 
 Manual flow tests are documented in [`docs/SmokeTest.md`](docs/SmokeTest.md).
 
