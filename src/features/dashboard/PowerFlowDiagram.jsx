@@ -1,15 +1,19 @@
 import { sources } from '../../config/sources.config.js'
 import { describeSourceState } from '../shared/sourceState.js'
+import {
+  ATS,
+  HEIGHT,
+  LOAD,
+  NODE_H,
+  NODE_W,
+  SOURCE_Y,
+  WIDTH,
+  labelWidth,
+  sourceFlow,
+  sourceX,
+} from './powerFlowGeometry.js'
 
-const WIDTH = 324
-const HEIGHT = 300
-const NODE_W = 100
-const NODE_H = 56
-const SOURCE_Y = 12
-const ATS = { x: 112, y: 128, w: 100, h: 48 }
-const LOAD = { x: 102, y: 236, w: 120, h: 58 }
-
-const sourceX = (index) => 2 + index * (NODE_W + 10)
+const LABEL_H = 26
 
 /**
  * Animated ATS power-flow visualization (SPEC.md §13). It is derived only
@@ -17,17 +21,29 @@ const sourceX = (index) => 2 + index * (NODE_W + 10)
  * source's path while data is live and no transition is in progress.
  * Under reduced motion the path is shown statically with direction
  * arrows.
+ *
+ * `activePowerLabel` (formatted active power of the supplying source) is
+ * drawn on the active flow path. It is omitted while switching, when data
+ * is not live, or when the caller has no permitted value. The label keeps
+ * its element across source changes so it glides to the new path (no
+ * movement under reduced motion).
  */
-function PowerFlowDiagram({ status, live, loadPowerLabel }) {
+function PowerFlowDiagram({ status, live, loadPowerLabel, activePowerLabel }) {
   const { activeSource, sourceStatus, ats } = status
   const transitioning = ats.transitioning
   const flowing = live && !transitioning && activeSource !== null
+  const activeIndex = sources.findIndex((s) => s.id === activeSource)
+  const activeLabel = sources[activeIndex]?.label
+  const showValue = flowing && Boolean(activePowerLabel)
+  const labelText = activePowerLabel ?? ''
+  const labelW = labelWidth(labelText || '0.00 kW')
+  const labelMid = activeIndex >= 0 ? sourceFlow(activeIndex).mid : sourceFlow(1).mid
 
   const description = [
     transitioning
       ? 'The ATS is switching sources; no source is supplying the load.'
       : activeSource
-        ? `${sources.find((s) => s.id === activeSource)?.label} is supplying the load through the ATS.`
+        ? `${activeLabel} is supplying the load through the ATS${showValue ? ` at ${activePowerLabel}` : ''}.`
         : 'No active source.',
     ...sources.map((s) => `${s.label}: ${describeSourceState(sourceStatus[s.id], transitioning).label}.`),
     live ? '' : 'Data is not live.',
@@ -60,10 +76,7 @@ function PowerFlowDiagram({ status, live, loadPowerLabel }) {
         const x = sourceX(index)
         const isActive = state?.active && !transitioning
         const available = state?.available === true
-        const fromX = x + NODE_W / 2
-        const fromY = SOURCE_Y + NODE_H
-        const toX = ATS.x + ATS.w / 2 + (index - 1) * 30
-        const path = `M${fromX} ${fromY} C ${fromX} ${fromY + 40}, ${toX} ${ATS.y - 40}, ${toX} ${ATS.y}`
+        const path = sourceFlow(index).d
         const color = `var(${source.colorVar})`
         const display = describeSourceState(state, transitioning)
 
@@ -105,7 +118,7 @@ function PowerFlowDiagram({ status, live, loadPowerLabel }) {
             <text x={x + 12} y={SOURCE_Y + 24} fill="var(--color-text)" fontSize="15" fontWeight="600">
               {source.label}
             </text>
-            <text x={x + 12} y={SOURCE_Y + 44} fill="var(--color-muted)" fontSize="13">
+            <text x={x + 12} y={SOURCE_Y + 44} fill="var(--color-muted)" fontSize="14.5">
               {display.label}
             </text>
           </g>
@@ -132,6 +145,37 @@ function PowerFlowDiagram({ status, live, loadPowerLabel }) {
         />
       )}
 
+      {/* Active power on the live flow. One persistent element: it fades out
+          while switching and moves to the new active path afterwards. */}
+      <g
+        data-testid="active-power-label"
+        data-source={showValue ? activeSource : ''}
+        aria-hidden="true"
+        className="transition-[translate,opacity] duration-300 ease-out motion-reduce:transition-none"
+        style={{ translate: `${labelMid.x}px ${labelMid.y}px`, opacity: showValue ? 1 : 0 }}
+      >
+        <rect
+          x={-labelW / 2}
+          y={-LABEL_H / 2}
+          width={labelW}
+          height={LABEL_H}
+          rx={LABEL_H / 2}
+          fill="var(--color-surface)"
+          stroke={activeIndex >= 0 ? `var(${sources[activeIndex].colorVar})` : 'var(--color-border)'}
+          strokeWidth="2"
+        />
+        <text
+          y="0.36em"
+          textAnchor="middle"
+          fill="var(--color-text)"
+          fontSize="14.5"
+          fontWeight="600"
+          style={{ fontVariantNumeric: 'tabular-nums' }}
+        >
+          {labelText}
+        </text>
+      </g>
+
       <rect
         x={ATS.x}
         y={ATS.y}
@@ -146,13 +190,13 @@ function PowerFlowDiagram({ status, live, loadPowerLabel }) {
       <text x={ATS.x + ATS.w / 2} y={ATS.y + 20} textAnchor="middle" fill="var(--color-text)" fontSize="15" fontWeight="600">
         ATS
       </text>
-      <text x={ATS.x + ATS.w / 2} y={ATS.y + 39} textAnchor="middle" fill="var(--color-muted)" fontSize="13">
+      <text x={ATS.x + ATS.w / 2} y={ATS.y + 39} textAnchor="middle" fill="var(--color-muted)" fontSize="14.5">
         {transitioning
           ? 'Switching…'
           : !live
             ? 'Not live'
             : activeSource
-              ? `On ${sources.find((s) => s.id === activeSource)?.label}`
+              ? `On ${activeLabel}`
               : 'Open'}
       </text>
 
@@ -160,7 +204,7 @@ function PowerFlowDiagram({ status, live, loadPowerLabel }) {
       <text x={LOAD.x + LOAD.w / 2} y={LOAD.y + 24} textAnchor="middle" fill="var(--color-text)" fontSize="15" fontWeight="600">
         Load
       </text>
-      <text x={LOAD.x + LOAD.w / 2} y={LOAD.y + 45} textAnchor="middle" fill="var(--color-muted)" fontSize="13">
+      <text x={LOAD.x + LOAD.w / 2} y={LOAD.y + 45} textAnchor="middle" fill="var(--color-muted)" fontSize="14.5">
         {loadPowerLabel ?? (transitioning ? 'Not supplied' : !live ? 'Unknown' : flowing ? 'Supplied' : 'Not supplied')}
       </text>
     </svg>

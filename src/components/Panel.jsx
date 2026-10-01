@@ -2,7 +2,7 @@
  * Bordered surface for a dashboard section or card.
  * `as` lets a panel be a <section> with an accessible heading.
  */
-function Panel({ title, description, actions, meta, children, className = '', as: Tag = 'section', headingLevel = 2 }) {
+function Panel({ title, description, actions, meta, children, className = '', bodyClassName = 'p-4', as: Tag = 'section', headingLevel = 2 }) {
   const Heading = `h${headingLevel}`
   return (
     <Tag className={`min-w-0 rounded-lg border border-border bg-surface ${className}`}>
@@ -20,7 +20,7 @@ function Panel({ title, description, actions, meta, children, className = '', as
           )}
         </div>
       )}
-      <div className="p-4">{children}</div>
+      <div className={bodyClassName}>{children}</div>
     </Tag>
   )
 }
