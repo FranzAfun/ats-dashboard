@@ -18,6 +18,9 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [react(), tailwindcss()],
+    test: {
+      setupFiles: ['./src/test/setup.js'],
+    },
     define: {
       // Build-time constant: lets the bundler drop the mock adapter from
       // live builds entirely.
