@@ -292,6 +292,20 @@ unless the system provides confirmation.
 A failed or rejected command shall be clearly distinguishable from a
 successful command.
 
+### Implemented frontend behavior (mock integration)
+
+-   Every command requires a confirmation dialog.
+-   Only one command per control can be in progress; nothing is
+    retried automatically.
+-   Commands cannot be submitted while telemetry is not live (stale or
+    disconnected) or while a source transition is in progress.
+-   Source options that are already active or not available cannot be
+    selected; the reason is shown.
+-   Input cost/day accepts positive numbers with at most two decimal
+    places. Production limits (minimum, maximum, precision) are TBD.
+-   The production command format, validation rules and safety
+    interlocks remain TBD and must come from the existing system.
+
 ------------------------------------------------------------------------
 
 # 9. Users, Roles, Permissions, and Feature Access

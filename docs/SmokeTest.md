@@ -667,6 +667,53 @@ Select "Mock Disabled User".
 
 ------------------------------------------------------------------------
 
+## ST-034: HMI Source Change Command
+
+### Prerequisite
+
+"Mock Operator", "Normal operation" scenario. Mock commands never reach
+real devices.
+
+### Steps
+
+1.  Open HMI.
+2.  Select a target source that is available and not active.
+3.  Select "Request source change", then "Change source" in the dialog.
+4.  Repeat with the "Commands rejected" and "Commands fail" scenarios.
+
+### Expected Result
+
+-   The current active source cannot be selected ("Currently active").
+-   A confirmation dialog names the current and target sources;
+    "Cancel" or Escape sends nothing.
+-   Feedback shows "Pending", then "Accepted — applying…", then
+    "Applied". Only then does the active source change on the page.
+-   Rejected and failed commands are clearly shown as "Rejected" or
+    "Failed" with a message; the active source does not change.
+-   With "Stale telemetry" or "Disconnected", the request button is
+    disabled with the reason "Commands are unavailable while data is
+    not live."
+
+------------------------------------------------------------------------
+
+## ST-035: HMI Input Cost/Day
+
+### Steps
+
+1.  As "Mock Operator", open HMI.
+2.  Enter `-3` and select "Update input cost".
+3.  Enter `99.5` for Ghana Utility/Grid, submit and confirm.
+
+### Expected Result
+
+-   Step 2 shows a validation message and sends nothing.
+-   Step 3 shows Pending → Accepted → Applied, and the current Grid
+    value becomes GHS 99.50.
+-   "Mock HMI Observer" sees the HMI status but neither control, with
+    the note "No HMI actions are assigned to your account."
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:
