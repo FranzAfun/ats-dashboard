@@ -261,7 +261,7 @@ Live Node-RED integration is not implemented. The application must not be pointe
 
 ## Documentation
 
-- Agent guidance: [`docs/Agents/CLAUDE.md`](docs/Agents/CLAUDE.md), [`docs/Agents/10_AGENT_INSTRUCTIONS.md`](docs/Agents/10_AGENT_INSTRUCTIONS.md)
+- Agent guidance (root [`CLAUDE.md`](CLAUDE.md) points here): [`docs/Agents/CLAUDE.md`](docs/Agents/CLAUDE.md), [`docs/Agents/10_AGENT_INSTRUCTIONS.md`](docs/Agents/10_AGENT_INSTRUCTIONS.md)
 - Project documentation: [`docs/Project/`](docs/Project/)
 - Repository structure (authoritative): [`docs/Project/10_REPOSITORY_STRUCTURE.md`](docs/Project/10_REPOSITORY_STRUCTURE.md)
 - Smoke tests: [`docs/SmokeTest.md`](docs/SmokeTest.md)

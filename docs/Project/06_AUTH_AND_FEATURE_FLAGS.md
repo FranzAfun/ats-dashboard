@@ -148,6 +148,8 @@ hmi.view
 hmi.changeSource
 hmi.changeCost
 
+admin.view
+
 admin.users.view
 admin.users.manage
 
@@ -540,6 +542,28 @@ Administration
 
 The module should allow authorized administrators to manage supported
 access settings.
+
+### Administration Access Rules
+
+`admin.view` is the page-level permission for the Administration area.
+
+-   Without `admin.view`, Administration is not shown in navigation and
+    the route is protected.
+-   With `admin.view`, each section and action additionally requires its
+    granular permission. A section or action the user lacks permission
+    for is not shown.
+
+  Section / action             Required permission
+  ---------------------------- ---------------------------
+  Administration page          `admin.view`
+  View users                   `admin.users.view`
+  Manage users                 `admin.users.manage`
+  View roles/permissions       `admin.permissions.view`
+  Manage role permissions      `admin.permissions.manage`
+  View feature flags           `admin.features.view`
+  Manage feature flags         `admin.features.manage`
+
+`admin.view` alone grants no administrative data or actions.
 
 ------------------------------------------------------------------------
 

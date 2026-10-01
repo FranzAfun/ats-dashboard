@@ -73,7 +73,6 @@ Examples:
 -   Financial Analytics
 -   Alerts
 -   HMI Control
--   Settings
 -   Administration
 
 Pages should compose components rather than contain large amounts of
@@ -184,7 +183,6 @@ Proposed routes:
 /financial
 /alerts
 /hmi
-/settings
 /admin
 ```
 
@@ -331,20 +329,14 @@ The HMI interface must not bypass the approved ATS control path.
 
 ------------------------------------------------------------------------
 
-# 12. Settings Page
+# 12. Settings Page (Not in Scope)
 
-The Settings page can contain application-level settings.
+A Settings page is not part of the current application scope. No
+functional requirement in `03_FUNCTIONAL_REQUIREMENTS.md` defines
+settings behavior.
 
-Potential areas:
-
--   Display preferences
--   Unit preferences
--   Account information
--   Connection information where appropriate
--   Application configuration
-
-Device-level settings should not be exposed unless explicitly supported
-by the backend/control architecture.
+Do not build a Settings page unless a later documented requirement
+explicitly requires it.
 
 ------------------------------------------------------------------------
 
@@ -361,6 +353,10 @@ Administration
 ├── Feature Flags
 └── Access Review
 ```
+
+Page access to Administration requires `admin.view`. Each section and
+action additionally requires its granular permission (see
+`06_AUTH_AND_FEATURE_FLAGS.md` Section 18).
 
 Feature flags that control user-facing capabilities shall be managed
 through this module.

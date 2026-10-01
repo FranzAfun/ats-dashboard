@@ -211,6 +211,7 @@ Examples:
 -   `hmi.view`
 -   `hmi.changeSource`
 -   `hmi.changeCost`
+-   `admin.view`
 -   `admin.users.view`
 -   `admin.users.manage`
 -   `admin.features.view`

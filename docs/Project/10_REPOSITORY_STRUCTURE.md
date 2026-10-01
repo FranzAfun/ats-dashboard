@@ -58,6 +58,7 @@ ats-dashboard/
 ├── public/
 │
 ├── .gitignore
+├── CLAUDE.md
 ├── eslint.config.js
 ├── index.html
 ├── package.json
@@ -76,6 +77,10 @@ documentation that is not part of the application runtime.
 ### `docs/Agents/`
 
 Contains instructions for AI coding agents working in the repository.
+
+`docs/Agents/CLAUDE.md` is the authoritative agent instruction file. The
+root `CLAUDE.md` only points to it so that Claude Code discovers it
+automatically; it must not duplicate its content.
 
 ### `docs/Project/`
 
