@@ -844,3 +844,162 @@ meaningful motion, strong responsiveness, clear system states, and a
 polished modern interface.**
 
 Animation should make the system easier to understand, not harder.
+
+------------------------------------------------------------------------
+
+# 24. Visual Design Direction
+
+## 24.1 Decision
+
+The project owner selected Option B from
+`08_ATS_FULL_DEVELOPMENT_PLAN.md` Section 6: the design direction is
+proposed from the ATS product, the dashboard purpose and professional
+UI standards.
+
+The chosen direction is an **industrial control-room interface**: a
+calm, neutral, dark operational surface where color is reserved for
+system state. It follows the intent of high-performance HMI practice
+(ISA-101): the normal state is visually quiet, so abnormal states stand
+out immediately.
+
+It is deliberately **not** a generic SaaS dashboard.
+
+## 24.2 Principles
+
+1.  **Neutral by default.** Backgrounds, surfaces, borders and text are
+    cool neutral grays. Decorative color is not used.
+2.  **Color carries meaning.** Saturated color is used for status,
+    alarms, interaction focus and data series only.
+3.  **Status is never color-only.** Every status also has a text label,
+    and an icon or shape where useful.
+4.  **Numbers first.** Telemetry and financial values use tabular
+    figures, explicit units and a clear value/label hierarchy.
+5.  **Flat and bordered.** Surfaces are separated by borders and
+    tone, not heavy shadows, gradients or glass effects.
+6.  **Restrained motion.** Motion follows Sections 7–14. Continuous
+    motion is limited to the power-flow visualization.
+7.  **Mobile is first-class.** Layouts are designed for small mobile
+    screens as well as desktop (Section 6).
+
+Not used: random gradients, glassmorphism, neon glows, decorative
+illustrations, background animation, or color used only for
+decoration.
+
+## 24.3 Theme
+
+The initial theme is dark. A light theme is TBD and must not be added
+without a project decision.
+
+Dark was chosen because the dashboard is an always-on monitoring
+surface. A dark neutral (not pure black) background reduces glare and
+lets status colors read clearly.
+
+## 24.4 Color Tokens
+
+Tokens are defined once as Tailwind theme variables in
+`src/styles/index.css` and used through Tailwind utilities (for example
+`bg-surface`, `text-muted`, `border-border`). Components must not use
+arbitrary color values.
+
+### Neutrals
+
+  Token             Value       Use
+  ----------------- ----------- ------------------------------------
+  `canvas`          `#0f1417`   Page background
+  `surface`         `#161c20`   Cards, panels, navigation
+  `raised`          `#1d252a`   Hover and nested surfaces
+  `border`          `#2b353c`   Decorative dividers and card borders
+  `control`         `#64727c`   Form-control and interactive borders
+  `text`            `#e7ecef`   Primary text and values
+  `muted`           `#a3afb8`   Secondary text and labels
+  `subtle`          `#8794a0`   Tertiary text and metadata
+
+### Interaction
+
+  Token             Value       Use
+  ----------------- ----------- ------------------------------------
+  `accent`          `#5aa2e6`   Focus rings, active navigation,
+                                primary actions
+
+### Status
+
+  Token             Value       Meaning
+  ----------------- ----------- ------------------------------------
+  `ok`              `#3fb27f`   Normal / live / healthy
+  `warning`         `#e0a43a`   Warning / stale data
+  `critical`        `#ef6461`   Critical alarm / fault / failure
+  `info`            `#5aa2e6`   Informational
+  `offline`         `#8794a0`   Disconnected / unavailable / unknown
+
+### Contrast
+
+All text and status tokens meet WCAG AA (at least 4.5:1) on `canvas`,
+`surface` and `raised`. The lowest measured ratio is `critical` on
+`raised` at 4.94:1.
+
+`control` meets the 3:1 non-text contrast requirement on all three
+backgrounds. `border` is decorative and must not be the only boundary
+of an interactive control.
+
+### Source Identity Colors
+
+Solar, grid and generator need distinct identity colors for charts and
+the power-flow visualization. Their values are TBD and will be defined
+with the first chart or power-flow implementation.
+
+Rule: source identity colors must stay distinguishable from the
+`ok`, `warning` and `critical` status colors so that a source series is
+never mistaken for an alarm.
+
+## 24.5 Typography
+
+-   Font: the platform system UI font stack. No web font is loaded,
+    which avoids an extra network dependency for an operational tool.
+-   Numeric values: tabular figures (`tabular-nums`) so changing values
+    do not shift the layout.
+-   Base size: 16px. Labels and metadata are not smaller than 12px.
+-   Hierarchy comes from size, weight and the `text` / `muted` /
+    `subtle` tokens rather than from color.
+
+## 24.6 Shape, Spacing and Elevation
+
+-   Spacing: the Tailwind 4px spacing scale.
+-   Radius: small and consistent (`rounded-md` for controls,
+    `rounded-lg` for cards and panels).
+-   Elevation: borders and surface tone. Shadows are reserved for
+    overlays such as the mobile navigation drawer and modals.
+
+## 24.7 Layout and Breakpoints
+
+Tailwind's default breakpoints are used:
+
+  Breakpoint   Min width   Typical device
+  ------------ ----------- ------------------------
+  (base)       0           Small mobile (from 320px)
+  `sm`         640px       Large mobile
+  `md`         768px       Tablet
+  `lg`         1024px      Laptop
+  `xl`         1280px      Desktop
+
+-   Below `lg`: a top bar with a menu button that opens a navigation
+    drawer.
+-   From `lg`: a persistent sidebar.
+-   Touch targets are at least 44px high on touch-sized layouts.
+-   No horizontal page scrolling at 320px width.
+
+## 24.8 Interaction States
+
+-   Focus: a visible 2px `accent` focus ring on every interactive
+    element (`focus-visible`).
+-   Hover: a tone change to `raised`, never a color-only change of
+    meaning.
+-   Active navigation: `accent` indicator plus `aria-current="page"`.
+-   Unauthorized actions are hidden (Section 5.5), so no "disabled for
+    permission reasons" visual state exists.
+
+## 24.9 Motion Tokens
+
+-   Fast: 150ms, ease-out — hover and small state changes.
+-   Standard: 200ms, ease-out — drawers, panels and menus.
+-   Under `prefers-reduced-motion: reduce`, transitions are removed and
+    the end state is shown immediately.

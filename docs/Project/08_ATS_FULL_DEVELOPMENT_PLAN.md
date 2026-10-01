@@ -270,6 +270,10 @@ product, dashboard purpose and professional UI standards.
 
 The selected direction will then become the project's visual foundation.
 
+**Decision:** Option B was selected. The chosen direction (industrial
+control-room interface) and the initial design tokens are documented in
+`SPEC.md` Section 24.
+
 ------------------------------------------------------------------------
 
 ## 7. Important Development Rules
