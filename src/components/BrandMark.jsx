@@ -1,6 +1,6 @@
 function BrandMark() {
   return (
-    <span className="flex items-center gap-2 text-base font-semibold text-text">
+    <span className="flex items-center gap-2 text-base font-semibold whitespace-nowrap text-text">
       <svg
         viewBox="0 0 32 32"
         className="size-6 shrink-0"

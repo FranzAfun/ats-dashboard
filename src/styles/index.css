@@ -33,6 +33,15 @@
   /* Restrained page-enter transition (SPEC.md §24.9). */
   --animate-enter: enter 200ms ease-out;
 
+  /* Power-flow energy movement: the only continuous animation. */
+  --animate-flow: flow 1.1s linear infinite;
+
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+
   @keyframes enter {
     from {
       opacity: 0;

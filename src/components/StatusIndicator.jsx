@@ -8,6 +8,7 @@ const tones = {
   critical: { text: 'text-critical', shape: 'diamond' },
   info: { text: 'text-info', shape: 'circle' },
   offline: { text: 'text-offline', shape: 'ring' },
+  neutral: { text: 'text-muted', shape: 'square' },
 }
 
 function Shape({ shape }) {
@@ -23,6 +24,13 @@ function Shape({ shape }) {
     return (
       <svg {...common}>
         <path d="M5 0 10 5 5 10 0 5z" fill="currentColor" />
+      </svg>
+    )
+  }
+  if (shape === 'square') {
+    return (
+      <svg {...common}>
+        <rect x="1.5" y="1.5" width="7" height="7" fill="none" stroke="currentColor" strokeWidth="1.5" />
       </svg>
     )
   }

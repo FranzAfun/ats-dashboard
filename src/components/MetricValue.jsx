@@ -9,7 +9,7 @@ function MetricValue({ label, value, unit, size = 'md', className = '' }) {
   return (
     <div className={`min-w-0 ${className}`}>
       <dt className="text-xs text-muted">{label}</dt>
-      <dd className="mt-0.5 flex items-baseline gap-1">
+      <dd className="mt-0.5 flex flex-wrap items-baseline gap-x-1">
         {missing ? (
           <>
             <span className={`${valueSize} font-semibold text-subtle`} aria-hidden="true">

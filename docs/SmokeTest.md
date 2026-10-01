@@ -550,6 +550,45 @@ Select "Mock Disabled User".
 
 ------------------------------------------------------------------------
 
+## ST-028: Dashboard Sections Follow Feature Access
+
+### Steps
+
+1.  As "Mock Administrator", open the Dashboard.
+2.  Switch to "Mock Viewer".
+3.  Switch to "Mock Viewer (no Financial)".
+
+### Expected Result
+
+-   Step 1: core sections (power flow, system overview, tariff,
+    temperature, source status) plus Load, Active alarms, Today's energy
+    cost and HMI remote control are shown.
+-   Step 2: the HMI section disappears; the other sections remain.
+-   Step 3: the financial section ("Today's energy cost") also
+    disappears. No empty gap is left behind.
+
+------------------------------------------------------------------------
+
+## ST-029: Power Flow Follows the Active Source
+
+### Steps
+
+1.  Open the Dashboard and locate the power-flow diagram.
+2.  Note the active source in "System overview".
+3.  Select the "Stale telemetry" scenario and wait about 10 seconds.
+
+### Expected Result
+
+-   The highlighted path runs from the active source through the ATS to
+    the load, and only that path shows moving energy.
+-   The ATS box shows "On <source>".
+-   With stale data the movement stops, the ATS box shows "Not live" and
+    a "Stale data" notice appears above the dashboard.
+-   With reduced motion enabled, the path is static with a direction
+    arrow.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:
