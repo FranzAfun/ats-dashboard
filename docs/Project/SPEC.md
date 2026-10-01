@@ -888,12 +888,13 @@ decoration.
 
 ## 24.3 Theme
 
-The initial theme is dark. A light theme is TBD and must not be added
-without a project decision.
+The application has a dark theme (the original design, unchanged) and a
+light theme (Section 24.10), selected with a toggle in the application
+shell.
 
-Dark was chosen because the dashboard is an always-on monitoring
-surface. A dark neutral (not pure black) background reduces glare and
-lets status colors read clearly.
+Dark was chosen as the primary design because the dashboard is an
+always-on monitoring surface. A dark neutral (not pure black) background
+reduces glare and lets status colors read clearly.
 
 ## 24.4 Color Tokens
 
@@ -1020,6 +1021,55 @@ Tailwind's default breakpoints are used:
 -   Standard: 200ms, ease-out — drawers, panels and menus.
 -   Under `prefers-reduced-motion: reduce`, transitions are removed and
     the end state is shown immediately.
+
+## 24.10 Light Theme
+
+Both themes use the same token names; only the values differ. Dark
+values are defined in `@theme`; light values override them under
+`:root[data-theme="light"]` in `src/styles/index.css`. Components never
+reference theme-specific colors.
+
+### Theme selection
+
+-   A toggle (sun/moon icon button) in the sidebar header and the mobile
+    top bar switches the theme.
+-   The choice is saved in `localStorage` (`ats-dashboard.theme`).
+-   Without a saved choice the operating-system `prefers-color-scheme`
+    is followed, including live changes. Browsers report `light` when
+    the system has no explicit setting.
+-   `public/theme-init.js` applies the theme before first paint (no
+    flash). It is an external file because the Content-Security-Policy
+    does not allow inline scripts; `src/lib/theme.js` manages changes.
+-   Thinking Orbs use `theme="auto"`, which follows the `data-theme`
+    attribute.
+
+### Light tokens
+
+  Token               Value       Token               Value
+  ------------------- ----------- ------------------- -----------
+  `canvas`            `#f3f5f7`   `accent`            `#1a66b8`
+  `surface`           `#ffffff`   `ok`                `#16774a`
+  `raised`            `#e9edf1`   `warning`           `#8f5b00`
+  `border`            `#d3dae0`   `critical`          `#b42d24`
+  `control`           `#76838e`   `info`              `#1a66b8`
+  `text`              `#12181d`   `offline`           `#56636e`
+  `muted`             `#47535e`   `source-solar`      `#b97a00`
+  `subtle`            `#56636e`   `source-grid`       `#2a78d6`
+                                  `source-generator`  `#c7407a`
+
+### Light contrast (measured)
+
+-   All text and status tokens are at least 4.5:1 on `canvas`, `surface`
+    and `raised`; the lowest is `ok` on `raised` at 4.73:1.
+-   `control` is at least 3:1 on all three backgrounds (3.30:1 on
+    `raised`).
+-   Primary buttons (`canvas` text on `accent`) measure 5.28:1.
+-   Source colors pass the palette validator in light mode (all pairs):
+    worst CVD separation ΔE 13.3, worst normal-vision ΔE 20.0, all at
+    least 3:1 against `canvas`, `surface` and `raised`.
+-   An automated audit of every page, in both themes at 375px and
+    1440px (including the alarm banner and confirmation dialog), found
+    no text below WCAG AA (lowest 4.73:1 light, 5.02:1 dark).
 
 ------------------------------------------------------------------------
 

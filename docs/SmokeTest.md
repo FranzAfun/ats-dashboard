@@ -772,6 +772,34 @@ real devices.
 
 ------------------------------------------------------------------------
 
+## ST-038: Light/Dark Theme
+
+### Steps
+
+1.  Clear site data (or use a private window) and set the operating
+    system to light mode; open the application.
+2.  Set the operating system to dark mode without reloading.
+3.  Select the theme toggle (sun/moon icon in the sidebar header, or in
+    the top bar on small screens).
+4.  Reload the page, then change the operating-system theme again.
+5.  Visit every page in both themes at a mobile and a desktop width,
+    including an open HMI confirmation dialog, the navigation drawer
+    and the "Active alarms" scenario.
+
+### Expected Result
+
+-   Steps 1–2: with no saved choice the application follows the system
+    theme, including the live change.
+-   Step 3: the theme switches immediately; the button label says which
+    theme it switches to.
+-   Step 4: the chosen theme is kept after reload and no longer follows
+    the system. There is no flash of the other theme while loading.
+-   Step 5: cards, charts, status indicators, power-flow diagram, forms,
+    dialogs and loading orbs are readable in both themes; no layout or
+    behavior changes between themes.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:

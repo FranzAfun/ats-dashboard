@@ -50,6 +50,36 @@
   }
 }
 
+/*
+ * Light theme (SPEC.md §24.10). Same token names, light values; the dark
+ * values above are the default and are not changed. The theme is applied
+ * with data-theme on <html> by public/theme-init.js and lib/theme.js.
+ */
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-canvas: #f3f5f7;
+  --color-surface: #ffffff;
+  --color-raised: #e9edf1;
+  --color-border: #d3dae0;
+  --color-control: #76838e;
+  --color-text: #12181d;
+  --color-muted: #47535e;
+  --color-subtle: #56636e;
+
+  --color-accent: #1a66b8;
+
+  --color-ok: #16774a;
+  --color-warning: #8f5b00;
+  --color-critical: #b42d24;
+  --color-info: #1a66b8;
+  --color-offline: #56636e;
+
+  --color-source-solar: #b97a00;
+  --color-source-grid: #2a78d6;
+  --color-source-generator: #c7407a;
+}
+
 @layer base {
   html {
     color-scheme: dark;

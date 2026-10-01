@@ -55,7 +55,7 @@ ats-dashboard/
 │   ├── App.jsx
 │   └── main.jsx
 │
-├── public/
+├── public/            static files, incl. theme-init.js (pre-paint theme)
 │
 ├── .env.example        documented VITE_* variables (no secrets)
 ├── .gitignore

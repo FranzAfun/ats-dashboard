@@ -9,6 +9,7 @@ import NavigationList from '../components/navigation/NavigationList.jsx'
 import ShellPanel from '../components/navigation/ShellPanel.jsx'
 import RequireSection from '../components/access/RequireSection.jsx'
 import LiveAlarmBanner from '../features/alerts/LiveAlarmBanner.jsx'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import SessionBoundary from './SessionBoundary.jsx'
 
 /**
@@ -31,9 +32,12 @@ function AppLayout() {
       </a>
 
       <aside className="hidden border-r border-border bg-surface lg:fixed lg:inset-y-0 lg:flex lg:w-60 lg:flex-col">
-        <div className="flex min-h-16 flex-col justify-center gap-1 border-b border-border px-5 py-3">
-          <BrandMark />
-          <ConnectionStatus />
+        <div className="flex min-h-16 items-center justify-between gap-2 border-b border-border py-3 pr-2 pl-5">
+          <div className="flex flex-col gap-1">
+            <BrandMark />
+            <ConnectionStatus />
+          </div>
+          <ThemeToggle />
         </div>
         <nav aria-label="Primary" className="flex-1 overflow-y-auto p-3">
           <NavigationList />
@@ -63,12 +67,13 @@ function AppLayout() {
             <path d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
-        <BrandMark />
-        <span className="ml-auto flex items-center gap-2 pr-2">
+        <BrandMark compact />
+        <span className="ml-auto flex items-center gap-1 pr-1 sm:gap-2">
           <span className="hidden sm:inline">
             <ConnectionStatus />
           </span>
           <MockDataBadge />
+          <ThemeToggle />
         </span>
       </header>
 

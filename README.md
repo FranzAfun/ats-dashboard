@@ -297,6 +297,7 @@ The frontend is implemented end-to-end against the **mock** integration adapter:
 - Dashboard (system overview, source status, tariff, temperature, animated power flow, feature-gated sections)
 - Power parameters, condition awareness (alarm banner and alerts), financial analytics with export, HMI controls with confirmation and command feedback, administration
 - Loading, empty, error, stale and disconnected states; reduced-motion support
+- Light and dark themes (toggle in the shell; saved choice, otherwise the system preference)
 - Unit tests (`npm test`) and manual smoke tests (`docs/SmokeTest.md`)
 
 Not implemented because the information is not confirmed yet: the live integration adapter (transport, payloads, commands), real authentication/authorization, historical storage, production financial rules, alarm definitions and production thresholds. See `docs/Project/09_DEVELOPMENT_ROADMAP.md` (Implementation Status).
