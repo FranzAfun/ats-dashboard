@@ -57,8 +57,10 @@ ats-dashboard/
 │
 ├── public/
 │
+├── .env.example        documented VITE_* variables (no secrets)
 ├── .gitignore
 ├── CLAUDE.md
+├── netlify.toml        Netlify build, SPA routing and security headers
 ├── eslint.config.js
 ├── index.html
 ├── package.json

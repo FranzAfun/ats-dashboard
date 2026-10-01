@@ -267,6 +267,26 @@ When unset, `npm run dev` uses `mock` and production builds use `live`, so a pro
 
 Live Node-RED integration is not implemented. The application must not be pointed at production devices.
 
+Copy `.env.example` to `.env.local` to set `VITE_DATA_SOURCE` locally.
+
+---
+
+## Deployment (Netlify)
+
+`netlify.toml` configures the build (`npm run build`, publish `dist`, Node 22), single-page-application routing and security headers (CSP, frame, content-type and referrer policies).
+
+| Deploy type | Netlify environment | Result |
+| --- | --- | --- |
+| Default | `VITE_DATA_SOURCE` unset | Live adapter. Shows "not configured" states until the live integration exists. Contains no mock data. |
+| Demo | `VITE_DATA_SOURCE=mock` | Mock data with the "Mock data" badge and mock user/scenario controls. |
+
+Remaining deployment dependencies (TBD):
+
+- The production integration transport and endpoint. When confirmed, add it to the CSP `connect-src` in `netlify.toml`.
+- The authentication provider and session handling.
+- How a publicly hosted frontend reaches the locally hosted Node-RED system securely (network path, HTTPS, authentication).
+- Monitoring/logging approach.
+
 ---
 
 ## Documentation

@@ -745,6 +745,26 @@ real devices.
 
 ------------------------------------------------------------------------
 
+## ST-037: Production Builds
+
+### Steps
+
+1.  Run `npm run build` and `npm run preview`, then open the preview URL.
+2.  Run `VITE_DATA_SOURCE=mock npm run build` and `npm run preview`.
+3.  In the mock preview, open a deep link such as `/power` directly.
+
+### Expected Result
+
+-   Step 1 (default live build): no "Mock data" badge; pages show
+    "Session unavailable — Authentication and the live ATS integration
+    are not configured yet." No mock values appear anywhere.
+-   Step 2: the application works with mock data and shows the "Mock
+    data" badge.
+-   Step 3: the page loads directly (SPA routing). On Netlify the same
+    is provided by `netlify.toml`.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:
