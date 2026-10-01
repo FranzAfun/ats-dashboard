@@ -1,5 +1,4 @@
 import ErrorState from '../components/ErrorState.jsx'
-import LoadingState from '../components/LoadingState.jsx'
 import { useAccess } from '../hooks/useAccess.js'
 
 /**
@@ -8,9 +7,8 @@ import { useAccess } from '../hooks/useAccess.js'
 function SessionBoundary({ children }) {
   const { status, error, user, access } = useAccess()
 
-  if (status === 'loading') {
-    return <LoadingState orb="connecting" message="Loading session…" className="min-h-[50vh]" />
-  }
+  // Session loading is communicated by the startup overlay (BootGate).
+  if (status === 'loading') return null
 
   if (status === 'error') {
     return (

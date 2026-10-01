@@ -174,22 +174,29 @@ export function createMockPlant() {
     }
   }
 
+  // Alarm timestamps are fixed when an alarm becomes active (and for the
+  // history at startup) so they stay stable between updates, as real
+  // alarm events would.
+  const startedAt = Date.now()
+  const history = mockAlarmHistory.map(({ hoursAgo, ...alarm }) => ({
+    ...alarm,
+    active: false,
+    timestamp: new Date(startedAt - hoursAgo * 3600_000).toISOString(),
+  }))
+  let activeAlarms = []
+
   function buildAlarms(now) {
     if (scenario() === 'empty') return []
-    const active =
-      scenario() === 'alarm'
-        ? mockActiveAlarms.map((alarm, index) => ({
-            ...alarm,
-            active: true,
-            timestamp: new Date(now - (index + 1) * 4 * 60_000).toISOString(),
-          }))
-        : []
-    const history = mockAlarmHistory.map(({ hoursAgo, ...alarm }) => ({
-      ...alarm,
-      active: false,
-      timestamp: new Date(now - hoursAgo * 3600_000).toISOString(),
-    }))
-    return [...active, ...history]
+    if (scenario() !== 'alarm') {
+      activeAlarms = []
+    } else if (activeAlarms.length === 0) {
+      activeAlarms = mockActiveAlarms.map((alarm, index) => ({
+        ...alarm,
+        active: true,
+        timestamp: new Date(now - index * 60_000).toISOString(),
+      }))
+    }
+    return [...activeAlarms, ...history]
   }
 
   function buildControlState(now) {

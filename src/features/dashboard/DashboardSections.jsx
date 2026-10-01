@@ -25,7 +25,7 @@ export function PowerSummarySection() {
       meta={telemetry.data && <FreshnessBadge timestamp={telemetry.data.timestamp} />}
       actions={<Link to={paths.power} className={linkClass}>Power details</Link>}
     >
-      <DataState state={telemetry} loadingMessage="Retrieving live telemetry…" orb="listening">
+      <DataState state={telemetry} compact loadingMessage="Retrieving live telemetry…" orb="listening">
         {({ load }) => {
           const power = formatPower(load.power)
           return (
@@ -46,7 +46,7 @@ export function AlertsSummarySection() {
   const alarms = useAlarms()
   return (
     <Panel title="Active alarms" actions={<Link to={paths.alerts} className={linkClass}>All alerts</Link>}>
-      <DataState state={alarms} loadingMessage="Loading alarms…" isEmpty={() => false}>
+      <DataState state={alarms} compact loadingMessage="Loading alarms…" isEmpty={() => false}>
         {(list) => {
           const active = list.filter((a) => a.active)
           if (active.length === 0) {
@@ -82,12 +82,13 @@ export function FinancialSummarySection() {
     () => Promise.all([analyticsService.getEnergyAndCost('daily'), analyticsService.getSourceUsage('daily')]),
     [],
   )
-  const data = useAsyncData(loadToday, 'financial-summary')
+  const data = useAsyncData(loadToday, 'dashboard:financial-summary', { cache: true })
 
   return (
     <Panel title="Today's energy cost" actions={<Link to={paths.financial} className={linkClass}>Financial analytics</Link>}>
       <DataState
         state={data}
+        compact
         orb="solving"
         loadingMessage="Calculating analytics…"
         isEmpty={(value) => !value?.[0]?.sources?.length}

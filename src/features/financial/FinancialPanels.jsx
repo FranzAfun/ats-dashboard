@@ -132,9 +132,10 @@ export function PowerFactorPanel({ losses, period }) {
   )
 }
 
-export function TransitionMetricsPanel({ metrics, events }) {
+/** Content of the ATS transition metrics panel (the page owns the panel). */
+export function TransitionMetricsContent({ metrics, events }) {
   return (
-    <Panel title="ATS transition metrics">
+    <>
       {metrics ? (
         <div className="grid gap-4">
           <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
@@ -167,7 +168,7 @@ export function TransitionMetricsPanel({ metrics, events }) {
       ) : (
         <p className="text-sm text-subtle">Transition metrics are not available.</p>
       )}
-    </Panel>
+    </>
   )
 }
 

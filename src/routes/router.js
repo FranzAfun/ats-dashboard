@@ -4,7 +4,6 @@ import AppLayout from '../layouts/AppLayout.jsx'
 import NotFoundPage from '../pages/NotFoundPage.jsx'
 import PageAccessGuard from './PageAccessGuard.jsx'
 import RouteErrorBoundary from './RouteErrorBoundary.jsx'
-import RouteLoading from './RouteLoading.jsx'
 
 /** Route-level code splitting: each page is loaded on first visit. */
 const page = (load) => async () => ({ Component: (await load()).default })
@@ -18,7 +17,8 @@ export const router = createBrowserRouter([
     path: '/',
     Component: AppLayout,
     ErrorBoundary: RouteErrorBoundary,
-    HydrateFallback: RouteLoading,
+    // Startup loading is shown by BootGate; nothing is rendered here.
+    HydrateFallback: () => null,
     children: [
       {
         // Pathless route so page errors render inside the application shell.

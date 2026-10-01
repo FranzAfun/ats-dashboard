@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import DataState from '../components/DataState.jsx'
 import PageHeader from '../components/PageHeader.jsx'
+import Panel from '../components/Panel.jsx'
 import SegmentedControl from '../components/SegmentedControl.jsx'
 import RequireAction from '../components/access/RequireAction.jsx'
 import { buttonClasses } from '../components/buttonClasses.js'
@@ -10,9 +11,11 @@ import {
   PowerFactorPanel,
   SourceCostsPanel,
   SourceUsagePanel,
-  TransitionMetricsPanel,
+  TransitionMetricsContent,
 } from '../features/financial/FinancialPanels.jsx'
 import { useAsyncData } from '../hooks/useAsyncData.js'
+import { useStableLoading } from '../hooks/useStableLoading.js'
+import LoadingState from '../components/LoadingState.jsx'
 import { useSystemStatus } from '../hooks/useTelemetry.js'
 import { analyticsService } from '../services/analytics/analyticsService.js'
 import { exportService } from '../services/export/exportService.js'
@@ -46,8 +49,9 @@ function FinancialPage() {
     [],
   )
 
-  const periodData = useAsyncData(loadPeriod, period)
-  const transitions = useAsyncData(loadTransitions, 'transitions')
+  const periodData = useAsyncData(loadPeriod, `financial:${period}`, { keepPrevious: true, cache: true })
+  const transitions = useAsyncData(loadTransitions, 'financial:transitions', { cache: true })
+  const { showLoader: showUpdating } = useStableLoading(Boolean(periodData.refreshing))
 
   return (
     <>
@@ -64,13 +68,16 @@ function FinancialPage() {
       )}
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <SegmentedControl label="Period" options={periodOptions} value={period} onChange={setPeriod} />
+        <div className="flex flex-wrap items-center gap-3">
+          <SegmentedControl label="Period" options={periodOptions} value={period} onChange={setPeriod} />
+          {showUpdating && <LoadingState size="inline" orb="solving" message="Updating…" />}
+        </div>
         <RequireAction action="financial.export">
           <button
             type="button"
             className={buttonClasses.secondary}
-            disabled={periodData.status !== 'ready'}
-            onClick={() => exportService.exportFinancialPeriod({ period, ...periodData.data })}
+            disabled={periodData.status !== 'ready' || periodData.refreshing}
+            onClick={() => exportService.exportFinancialPeriod({ period: periodData.data.trend.period, ...periodData.data })}
           >
             Export CSV
           </button>
@@ -90,28 +97,34 @@ function FinancialPage() {
           {(data) => (
             <div className="grid gap-4">
               <FinancialSummary
-                period={period}
+                period={data.trend.period}
                 energy={data.energy}
                 status={status.status === 'ready' ? status.data : null}
               />
               <CostTrendPanel trend={data.trend} />
               <div className="grid gap-4 lg:grid-cols-3">
-                <SourceUsagePanel usage={data.usage} period={period} />
-                <SourceCostsPanel energy={data.energy} period={period} />
-                <PowerFactorPanel losses={data.losses} period={period} />
+                <SourceUsagePanel usage={data.usage} period={data.trend.period} />
+                <SourceCostsPanel energy={data.energy} period={data.trend.period} />
+                <PowerFactorPanel losses={data.losses} period={data.trend.period} />
               </div>
             </div>
           )}
         </DataState>
 
-        <DataState
-          state={transitions}
-          loadingMessage="Loading transition metrics…"
-          errorTitle="Transition metrics unavailable"
-          isEmpty={() => false}
-        >
-          {(data) => <TransitionMetricsPanel metrics={data.metrics} events={data.events} />}
-        </DataState>
+        {/* Section-level loading uses the compact loader; the page-level
+            loader above remains the only full-size one. */}
+        <Panel title="ATS transition metrics">
+          <DataState
+            state={transitions}
+            compact
+            orb="searching"
+            loadingMessage="Loading transition metrics…"
+            errorTitle="Transition metrics unavailable"
+            isEmpty={() => false}
+          >
+            {(data) => <TransitionMetricsContent metrics={data.metrics} events={data.events} />}
+          </DataState>
+        </Panel>
       </div>
     </>
   )

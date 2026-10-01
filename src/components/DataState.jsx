@@ -2,6 +2,7 @@ import { buttonClasses } from './buttonClasses.js'
 import EmptyState from './EmptyState.jsx'
 import ErrorState from './ErrorState.jsx'
 import LoadingState from './LoadingState.jsx'
+import { useStableLoading } from '../hooks/useStableLoading.js'
 
 const errorMessages = {
   NOT_CONFIGURED: 'The live ATS integration is not configured yet.',
@@ -13,7 +14,8 @@ const errorMessages = {
 /**
  * Renders loading, error, empty or populated state for a data request.
  * On error the data is not rendered, so old values are never presented
- * as current.
+ * as current. Loader visibility is smoothed (useStableLoading): fast
+ * responses show no loader, and a shown loader never flashes.
  */
 function DataState({
   state,
@@ -26,8 +28,14 @@ function DataState({
   compact = false,
   children,
 }) {
-  if (state.status === 'loading') {
+  const { showLoader, pending } = useStableLoading(state.status === 'loading')
+
+  if (showLoader) {
     return <LoadingState orb={orb} message={loadingMessage} size={compact ? 'inline' : 'default'} />
+  }
+  if (pending) {
+    // Quiet placeholder until the loader is due; avoids a loader flash.
+    return <div aria-busy="true" className={compact ? 'h-5' : 'min-h-24'} />
   }
   if (state.status === 'error') {
     return (
