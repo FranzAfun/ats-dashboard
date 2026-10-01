@@ -262,8 +262,8 @@ specific HMI action.
 
 ### Expected Result
 
--   The restricted action is hidden or disabled according to the
-    application's access rules.
+-   The restricted action is hidden. It is not shown as a disabled
+    control.
 -   Other permitted HMI functionality remains available.
 
 ------------------------------------------------------------------------

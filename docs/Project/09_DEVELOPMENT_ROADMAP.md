@@ -1,4 +1,4 @@
-# 08. Development Roadmap
+# 09. Development Roadmap
 
 ## Purpose
 
@@ -19,17 +19,19 @@ and validated before unrelated work begins.
 
 ### Required baseline documents
 
--   `01_PROJECT_OVERVIEW.md`
--   `02_SYSTEM_ARCHITECTURE.md`
--   `03_FUNCTIONAL_REQUIREMENTS.md`
--   `04_DATA_CONTRACT.md`
--   `05_FRONTEND_ARCHITECTURE.md`
--   `06_AUTH_AND_FEATURE_FLAGS.md`
--   `07_INTEGRATION_PLAN.md`
--   `SPEC.md`
--   `08_DEVELOPMENT_ROADMAP.md`
--   `09_REPOSITORY_STRUCTURE.md`
--   `10_AGENT_INSTRUCTIONS.md`
+-   `docs/Project/01_PROJECT_OVERVIEW.md`
+-   `docs/Project/02_SYSTEM_ARCHITECTURE.md`
+-   `docs/Project/03_FUNCTIONAL_REQUIREMENTS.md`
+-   `docs/Project/04_DATA_CONTRACT.md`
+-   `docs/Project/05_FRONTEND_ARCHITECTURE.md`
+-   `docs/Project/06_AUTH_AND_FEATURE_FLAGS.md`
+-   `docs/Project/07_INTEGRATION_PLAN.md`
+-   `docs/Project/08_ATS_FULL_DEVELOPMENT_PLAN.md`
+-   `docs/Project/09_DEVELOPMENT_ROADMAP.md`
+-   `docs/Project/10_REPOSITORY_STRUCTURE.md`
+-   `docs/Project/SPEC.md`
+-   `docs/Agents/10_AGENT_INSTRUCTIONS.md`
+-   `docs/Agents/CLAUDE.md`
 -   `docs/SmokeTest.md`
 
 ## Phase 1: Existing-System and Integration Confirmation

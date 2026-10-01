@@ -55,6 +55,9 @@ existing PZEM/Node-RED data.
 
 Do not assume that every source provides every field.
 
+This structure describes telemetry for a power source only. Load
+telemetry uses its own structure (see Section 4.1).
+
 ------------------------------------------------------------------------
 
 # 4. Source Identifier
@@ -80,6 +83,46 @@ Example:
 
 The frontend should use the identifier for application logic and the
 label for presentation.
+
+The system has exactly three power sources. Load is **not** a source
+and must not be added to this identifier list.
+
+------------------------------------------------------------------------
+
+# 4.1 Load Telemetry Contract
+
+Load telemetry describes the electrical consumption side of the system.
+It is represented separately from source telemetry and therefore has no
+`source` field.
+
+Proposed application-level structure:
+
+``` json
+{
+  "timestamp": "2026-09-26T12:30:00Z",
+  "voltage": 230.4,
+  "current": 12.8,
+  "power": 2949.1,
+  "energy": 42.71,
+  "frequency": 50.0,
+  "powerFactor": 0.96
+}
+```
+
+### Notes
+
+This is a proposed application-level structure, not a confirmed
+payload.
+
+The load measurement point, the fields actually available, and how the
+existing PZEM/Node-RED data provides load values must be confirmed
+during integration.
+
+Do not assume that every field is available. Unavailable fields follow
+the rules in Section 18.
+
+The frontend must not derive load telemetry by summing or otherwise
+combining source telemetry unless that rule is explicitly confirmed.
 
 ------------------------------------------------------------------------
 
@@ -370,10 +413,14 @@ rendering.
     "grid": {},
     "generator": {}
   },
+  "load": {},
   "alarms": [],
   "transitionMetrics": {}
 }
 ```
+
+`sources` contains source telemetry keyed by source identifier. `load`
+contains load telemetry as defined in Section 4.1.
 
 This object is an application convenience layer and does not mean
 Node-RED must produce one identical object.
@@ -499,34 +546,46 @@ The integration layer must perform any required conversion.
 
 ------------------------------------------------------------------------
 
-# 20. Type Safety
+# 20. Data Structure Documentation
 
-The frontend should define TypeScript types/interfaces for the data
-contract.
+The project uses JavaScript only. TypeScript must not be introduced.
 
-Example:
-
-``` ts
-export interface Telemetry {
-  timestamp: string;
-  source: SourceId;
-  voltage?: number | null;
-  current?: number | null;
-  power?: number | null;
-  energy?: number | null;
-  frequency?: number | null;
-  powerFactor?: number | null;
-}
-```
+The data contract shall be documented in code with JSDoc type
+definitions and enforced with validation at integration boundaries.
 
 Example:
 
-``` ts
-export type SourceId = "solar" | "grid" | "generator";
+``` js
+/**
+ * @typedef {"solar" | "grid" | "generator"} SourceId
+ */
+
+/**
+ * @typedef {Object} SourceTelemetry
+ * @property {string} timestamp
+ * @property {SourceId} source
+ * @property {number | null} [voltage]
+ * @property {number | null} [current]
+ * @property {number | null} [power]
+ * @property {number | null} [energy]
+ * @property {number | null} [frequency]
+ * @property {number | null} [powerFactor]
+ */
+
+/**
+ * @typedef {Object} LoadTelemetry
+ * @property {string} timestamp
+ * @property {number | null} [voltage]
+ * @property {number | null} [current]
+ * @property {number | null} [power]
+ * @property {number | null} [energy]
+ * @property {number | null} [frequency]
+ * @property {number | null} [powerFactor]
+ */
 ```
 
-The final interfaces shall be updated once the actual integration
-payloads are confirmed.
+The final JSDoc definitions shall be updated once the actual
+integration payloads are confirmed.
 
 ------------------------------------------------------------------------
 
@@ -594,6 +653,7 @@ verified:
 -   Actual MQTT payloads
 -   Actual Modbus-derived values
 -   Actual source identifiers
+-   Actual load telemetry fields and measurement point
 -   Actual units
 -   Actual timestamps
 -   Actual command payloads
@@ -619,7 +679,8 @@ unconfirmed.
 ### Proposed
 
 -   Application-level JSON structures
--   TypeScript interfaces
+-   Load telemetry structure (separate from source telemetry)
+-   JSDoc data-structure definitions
 -   Command request/response shapes
 -   Alarm structure
 -   Historical chart structure
@@ -628,6 +689,7 @@ unconfirmed.
 ### Not Yet Confirmed
 
 -   Exact live payloads
+-   Load measurement point and available load fields
 -   Exact MQTT topics
 -   Exact MQTT payloads
 -   Exact Modbus mapping

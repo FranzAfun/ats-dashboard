@@ -118,80 +118,57 @@ effective access.
 
 Services handle communication with external systems.
 
-Example structure:
+Services follow the folder-per-area structure defined in
+`10_REPOSITORY_STRUCTURE.md`:
 
 ``` text
 services/
-├── telemetry.service.js
-├── control.service.js
-├── analytics.service.js
-├── alerts.service.js
-├── auth.service.js
-├── access.service.js
-└── export.service.js
+├── telemetry/
+├── analytics/
+├── commands/
+├── auth/
+└── integration/
 ```
+
+Additional service areas (for example alerts, access, or export) follow
+the same folder-per-area pattern when they are implemented.
 
 Services should hide integration details from UI components.
 
 ------------------------------------------------------------------------
 
-# 5. Proposed Project Structure
+# 5. Project Structure
+
+The authoritative repository structure is defined in
+`10_REPOSITORY_STRUCTURE.md`.
+
+Summary of the `src/` layout:
 
 ``` text
 src/
 ├── app/
-│   ├── App.jsx
-│   ├── routes.jsx
-│   └── providers.jsx
-│
 ├── assets/
-│
 ├── components/
-│   ├── common/
-│   ├── dashboard/
-│   ├── power/
-│   ├── financial/
-│   ├── alerts/
-│   ├── hmi/
-│   └── admin/
-│
-├── data/
-│   ├── mock/
-│   └── constants/
-│
-├── hooks/
-│   ├── useAuth.js
-│   ├── useAccess.js
-│   └── useFeature.js
-│
-├── layouts/
-│   ├── AppLayout.jsx
-│   └── DashboardLayout.jsx
-│
-├── pages/
-│   ├── Dashboard/
-│   ├── Power/
-│   ├── Financial/
-│   ├── Alerts/
-│   ├── Hmi/
-│   ├── Settings/
-│   └── Admin/
-│
-├── services/
-│
-├── store/
-│
-├── utils/
-│
 ├── config/
-│
+├── data/
+├── features/
+├── hooks/
+├── layouts/
+├── lib/
+├── pages/
+├── routes/
+├── services/
 ├── styles/
-│
+├── utils/
+├── App.jsx
 └── main.jsx
 ```
 
-This structure may be adjusted during implementation if the actual
-project size or integration requirements justify it.
+Folders are created only when related code exists, as required by the
+structure growth rule in `10_REPOSITORY_STRUCTURE.md`.
+
+If this document and `10_REPOSITORY_STRUCTURE.md` differ on file or
+folder placement, `10_REPOSITORY_STRUCTURE.md` takes precedence.
 
 ------------------------------------------------------------------------
 
@@ -468,17 +445,20 @@ const navigation = [
   {
     label: "Dashboard",
     path: "/dashboard",
-    feature: null
+    feature: null,
+    permission: "dashboard.view"
   },
   {
     label: "Financial",
     path: "/financial",
-    feature: "financialAnalytics"
+    feature: "financialAnalytics",
+    permission: "financial.view"
   },
   {
     label: "HMI",
     path: "/hmi",
-    feature: "hmi"
+    feature: "hmi",
+    permission: "hmi.view"
   }
 ];
 ```
@@ -519,6 +499,9 @@ Dashboard itself is accessible.
 # 18. Action / Button Visibility
 
 Action controls should be permission-aware.
+
+If the user does not have permission for an action, the action is
+hidden. Unauthorized actions must not be shown as disabled controls.
 
 Example:
 
@@ -624,14 +607,13 @@ navigation, dashboard sections, and actions can be tested.
 
 # 22. Data Structures
 
-Shared application data structures should be kept in a dedicated
-location such as:
+Shared application data structures should be kept in one dedicated
+location within the structure defined in `10_REPOSITORY_STRUCTURE.md`.
 
-``` text
-src/
-└── data/
-    └── schemas/
-```
+`src/data/` is reserved for development and mock data, so shared
+data-structure definitions do not belong there. The exact location will
+be decided when the first shared definitions are introduced and then
+recorded in `10_REPOSITORY_STRUCTURE.md`.
 
 Because the project uses JavaScript, the application should use clear
 object shapes, JSDoc where useful, and validation at integration
@@ -736,11 +718,16 @@ The interface should support the screen sizes required for the project.
 
 The primary target is an operational dashboard environment.
 
-The UI should remain usable on:
+The UI must remain usable on:
 
 -   Desktop
 -   Laptop
--   Tablet where practical
+-   Tablet
+-   Small mobile screens
+
+Small mobile screens are a core requirement, not an optional or
+best-effort target. Responsive behavior must be designed from the start
+of each feature rather than added as a final cleanup task.
 
 Responsive behavior should be designed intentionally rather than relying
 on accidental browser wrapping.

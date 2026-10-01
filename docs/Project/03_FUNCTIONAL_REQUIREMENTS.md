@@ -129,6 +129,9 @@ The application shall display available load electrical parameters.
 The exact parameter list will depend on the telemetry supplied by the
 existing system.
 
+Load is not a power source. Load telemetry is represented separately
+from source telemetry, as defined in `04_DATA_CONTRACT.md`.
+
 ## FR-POWER-002: Generator Telemetry
 
 The application shall display available generator telemetry.
@@ -444,7 +447,14 @@ structured data where practical.
 
 ## FR-UI-004: Responsive Interface
 
-The interface shall support the screen sizes required by the project.
+The interface shall support:
+
+-   Desktop
+-   Laptop
+-   Tablet
+-   Small mobile screens
+
+Small mobile screens are a core requirement.
 
 ------------------------------------------------------------------------
 

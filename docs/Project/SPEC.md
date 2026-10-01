@@ -211,9 +211,16 @@ Examples:
 -   `hmi.view`
 -   `hmi.changeSource`
 -   `hmi.changeCost`
--   `admin.users`
--   `admin.features`
--   `admin.permissions`
+-   `admin.users.view`
+-   `admin.users.manage`
+-   `admin.features.view`
+-   `admin.features.manage`
+-   `admin.permissions.view`
+-   `admin.permissions.manage`
+
+Permission names follow the `.view` / `.manage` convention defined in
+`06_AUTH_AND_FEATURE_FLAGS.md`, which is the source of truth for
+permission naming.
 
 ## 5.4 Page Access
 
@@ -236,8 +243,14 @@ In this case:
 -   the HMI page remains visible
 -   the source-change control is hidden
 
-Do not show disabled controls when the requirement is to hide
-unauthorized actions.
+Unauthorized actions are hidden. Do not show them as disabled
+controls.
+
+### Access Rule Summary
+
+-   No page access: hide the navigation item and protect the route.
+-   Page access but no action permission: hide the action.
+-   No feature access: do not render the feature or dashboard section.
 
 ## 5.6 Feature Flags
 
@@ -385,6 +398,17 @@ Repository:
 
 https://github.com/RareFormLabs/thinking-orbs
 
+Installed package: `thinking-orbs` 0.3.2 from npm. The installed
+package metadata lists its repository as
+`https://github.com/Jakubantalik/Libraries.dev` (directory
+`packages/thinking-orbs`), not the repository linked above. Its
+documented API (`<ThinkingOrb state size theme />`, the nine states
+below, and a static frame under `prefers-reduced-motion: reduce`)
+matches the behavior described in this section. Use the installed
+package's API as the source of truth.
+
+The installed package provides two tuned sizes only: `64` and `20`.
+
 The library is suitable for this project and provides nine animated
 states:
 
@@ -529,18 +553,15 @@ Measure before adding heavy animation tooling.
 
 Animations should be treated as a reusable application layer.
 
-Proposed structure:
+Animation code follows the repository structure defined in
+`10_REPOSITORY_STRUCTURE.md`:
 
-``` text
-src/
-  animations/
-    transitions/
-    thinking-orbs/
-    motion.js
-    animationConfig.js
-```
+-   reusable animated components live in `src/components/`
+-   animation helpers and library setup live in `src/lib/`
+-   ATS-specific visualizations such as the power flow live in the
+    relevant feature folder under `src/features/`
 
-The exact structure may change during implementation.
+A separate `src/animations/` folder is not used.
 
 Create reusable wrappers instead of scattering animation implementation
 throughout pages.

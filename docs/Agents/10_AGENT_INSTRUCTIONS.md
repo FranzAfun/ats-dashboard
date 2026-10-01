@@ -143,7 +143,8 @@ Rules:
 
 -   If page access is missing, hide the navigation item and protect the
     route.
--   If action access is missing, hide or disable the relevant action.
+-   If action access is missing, hide the relevant action. Do not show
+    unauthorized actions as disabled controls.
 -   If feature access is missing, do not render the restricted feature
     or dashboard section.
 -   Admin-only feature management must remain protected.

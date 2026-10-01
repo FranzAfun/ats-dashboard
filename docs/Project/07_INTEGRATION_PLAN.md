@@ -220,14 +220,16 @@ Example:
 ``` text
 src/
 └── services/
-    ├── telemetry.service.js
-    ├── control.service.js
-    ├── analytics.service.js
-    ├── alerts.service.js
-    ├── auth.service.js
-    ├── access.service.js
-    └── export.service.js
+    ├── telemetry/
+    ├── analytics/
+    ├── commands/
+    ├── auth/
+    └── integration/
 ```
+
+This follows the services structure defined in
+`10_REPOSITORY_STRUCTURE.md`. Additional service areas follow the same
+folder-per-area pattern when they are implemented.
 
 Example:
 

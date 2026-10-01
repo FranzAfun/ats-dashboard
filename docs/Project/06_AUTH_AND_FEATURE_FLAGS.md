@@ -225,6 +225,9 @@ admin.features.manage
 This allows the application to expose only the actions the current user
 is allowed to perform.
 
+Unauthorized actions are hidden. They must not be shown as disabled
+controls.
+
 ------------------------------------------------------------------------
 
 # 8. Feature Flags

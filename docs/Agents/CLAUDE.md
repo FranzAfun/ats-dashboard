@@ -46,7 +46,13 @@ task before coding.
 -   Keep integration behind service/adaptor boundaries.
 -   Keep access control centralized.
 -   Keep feature flags centralized.
--   Preserve responsive behavior.
+-   Hide unauthorized actions; do not show them as disabled controls.
+-   Use the permission naming defined in
+    `docs/Project/06_AUTH_AND_FEATURE_FLAGS.md`.
+-   Follow the repository structure in
+    `docs/Project/10_REPOSITORY_STRUCTURE.md` (authoritative).
+-   Preserve responsive behavior on desktop, laptop, tablet, and small
+    mobile screens.
 -   Follow the animation requirements in `SPEC.md`.
 -   Make small, focused changes.
 -   Keep commits small and logically separated.

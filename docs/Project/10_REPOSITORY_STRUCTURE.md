@@ -8,6 +8,10 @@ Dashboard.
 The structure should keep UI, data access, access control,
 configuration, and reusable utilities separated.
 
+This document is the authoritative repository structure. Where other
+project documents describe a different file or folder layout, this
+document takes precedence.
+
 Do not create folders or files simply because they might be useful
 later. Add structure when it has a real implementation purpose.
 

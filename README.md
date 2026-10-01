@@ -188,18 +188,20 @@ UI visibility is not considered a security boundary. Authorization must also be 
 
 ### Frontend
 
-- React
-- Vite
-- JavaScript
-- Tailwind CSS
-- React Router
-- ESLint
+| Tool | Status |
+| --- | --- |
+| React 19 | In use |
+| Vite 8 | In use |
+| JavaScript (no TypeScript) | In use |
+| ESLint | Configured (`npm run lint`) |
+| Tailwind CSS 4 | Installed, not yet configured |
+| React Router 7 | Installed, not yet configured |
 
 ### Animation
 
-The project uses:
+The planned animation approach is:
 
-- `thinking-orbs` for meaningful processing/loading states
+- `thinking-orbs` for meaningful processing/loading states (installed, not yet used)
 - Transitions.dev patterns for reusable interface transitions
 - Custom animation for the ATS power-flow visualization
 
@@ -224,3 +226,42 @@ Integration Adapter
       ↓
 Existing ATS / Node-RED System
 ```
+
+---
+
+## Development Setup
+
+### Requirements
+
+- Node.js `^20.19.0` or `>=22.12.0` (required by Vite 8)
+- npm
+
+### Install
+
+```bash
+npm ci
+```
+
+### Commands
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Create a production build in `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Run ESLint |
+
+No automated test runner is configured yet. Manual flow tests are documented in [`docs/SmokeTest.md`](docs/SmokeTest.md).
+
+### Data
+
+Live Node-RED integration is not implemented. The application must not be pointed at production devices. Development uses mock data behind the application service layer once that layer exists.
+
+---
+
+## Documentation
+
+- Agent guidance: [`docs/Agents/CLAUDE.md`](docs/Agents/CLAUDE.md), [`docs/Agents/10_AGENT_INSTRUCTIONS.md`](docs/Agents/10_AGENT_INSTRUCTIONS.md)
+- Project documentation: [`docs/Project/`](docs/Project/)
+- Repository structure (authoritative): [`docs/Project/10_REPOSITORY_STRUCTURE.md`](docs/Project/10_REPOSITORY_STRUCTURE.md)
+- Smoke tests: [`docs/SmokeTest.md`](docs/SmokeTest.md)
