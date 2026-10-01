@@ -684,6 +684,22 @@ simply for the sake of having environment variables.
 
 ------------------------------------------------------------------------
 
+# 24.1 Selection Controls
+
+Application selection controls use the reusable `Picker` component
+(`src/components/Picker.jsx`) instead of native `<select>` menus. It is a
+listbox popup that follows the design system in both themes and
+provides keyboard navigation (arrows, Home/End, Enter/Space, Escape,
+type-ahead), outside-click closing, focus return, upward opening when
+there is no room below, 44 px targets and reduced-motion support. Lists
+with more than 10 options get a search field inside the popup.
+
+Small one-tap choices that are always visible (period, alert filter,
+admin section) stay as `SegmentedControl` radio groups; that interaction
+is more appropriate than a popup for two to three options.
+
+------------------------------------------------------------------------
+
 # 25. Styling Architecture
 
 Tailwind CSS will be the primary styling system.
@@ -742,6 +758,23 @@ Loading telemetry...
 Loading analytics...
 Loading alerts...
 ```
+
+### Implemented loading model
+
+-   **Startup:** one overlay loader (`src/app/BootGate.jsx`) covers
+    route code, session and the first integration connection. It is a
+    single Thinking Orb instance whose message changes per phase; it is
+    shown once per page load. While it is visible, other loaders render
+    nothing (`BootContext`), so the same state is never shown twice.
+-   **One loader per level:** a page shows at most one full-size loader;
+    independent sections inside panels use the compact inline loader.
+-   **No flicker:** `useStableLoading` shows a loader only when loading
+    lasts more than 200 ms and keeps a shown loader for at least 400 ms.
+    `DataState` applies it to every data request.
+-   **No reloading of known data:** shared live resources keep their
+    last data across navigation; `useAsyncData` can keep the previous
+    result (`keepPrevious`) or reuse the last result for the same key
+    (`cache`) while refreshing, shown as a small "Updating…" indicator.
 
 ------------------------------------------------------------------------
 

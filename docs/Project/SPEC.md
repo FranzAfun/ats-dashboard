@@ -1080,6 +1080,9 @@ reference theme-specific colors.
   Power-flow energy movement   Dashboard power-flow diagram Static path + arrow
   (moving dashes, only on the  (`features/dashboard/`)
   active path while live)
+  Active power value glide     Value pill on the active     Moves instantly
+  (300ms) to the new active    flow path
+  path after a source change
   Page enter (200ms fade/rise) Every route change           Removed
   Alarm banner enter           Live alarm banner            Removed
   Drawer slide (200ms)         Mobile navigation drawer     Removed
@@ -1087,9 +1090,10 @@ reference theme-specific colors.
   Color/tone transitions       Buttons, links, switches,    Removed
   (150ms)                      segmented controls
   Thinking Orbs                Meaningful waits only        Static frame (library)
+  Picker popup enter           Custom pickers               Removed
 
-Thinking Orbs mapping used (`components/LoadingState.jsx`, theme pinned
-to dark):
+Thinking Orbs mapping used (`components/LoadingState.jsx`, theme follows
+the application theme):
 
   Orb state      Used for
   -------------- ---------------------------------------------------
@@ -1099,9 +1103,22 @@ to dark):
   `solving`      Calculating financial analytics
   `working`      HMI command processing (pending/accepted)
 
-No artificial delays are added for visual effect. In mock mode the mock
+Loaders are smoothed so they never flicker (shown only after 200 ms,
+held for at least 400 ms) and startup uses one persistent overlay
+loader; see `05_FRONTEND_ARCHITECTURE.md` §27. No artificial delays are
+added for visual effect. In mock mode the mock
 adapter simulates network latency (~350 ms) so loading states are
 exercised realistically; live timing depends on the integration.
+
+### Active power on the power flow
+
+The Dashboard power-flow diagram shows the active source's power (from
+the power telemetry stream, `sources[activeSource].power`) as a value
+pill on the active flow path between the source and the ATS. It is
+shown only while the telemetry is live and no transition is in
+progress, it is part of the diagram's text alternative, and, like the
+load figure, it requires Power Monitoring access. After a source change
+the same pill moves to the new path.
 
 Transition patterns are implemented as small Tailwind/CSS transitions
 in this project's own visual system, following the Transitions.dev

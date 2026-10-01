@@ -686,13 +686,16 @@ real devices.
 ### Steps
 
 1.  Open HMI.
-2.  Select a target source that is available and not active.
+2.  Open the "Target source" picker and choose a source that is
+    available and not active.
 3.  Select "Request source change", then "Change source" in the dialog.
 4.  Repeat with the "Commands rejected" and "Commands fail" scenarios.
 
 ### Expected Result
 
--   The current active source cannot be selected ("Currently active").
+-   In the picker, the current active source is shown as a disabled
+    option ("Currently active"); the chosen source stays visible on the
+    picker until the command is sent.
 -   A confirmation dialog names the current and target sources;
     "Cancel" or Escape sends nothing.
 -   Feedback shows "Pending", then "Accepted — applying…", then
@@ -797,6 +800,119 @@ real devices.
 -   Step 5: cards, charts, status indicators, power-flow diagram, forms,
     dialogs and loading orbs are readable in both themes; no layout or
     behavior changes between themes.
+
+------------------------------------------------------------------------
+
+## ST-039: Active Power on the Power Flow
+
+### Prerequisite
+
+"Mock Operator" (has Power Monitoring).
+
+### Steps
+
+1.  Open the Dashboard and look at the power-flow diagram.
+2.  Wait a few seconds.
+3.  Change the source to Solar, then Generator, then back to Grid in HMI,
+    returning to the Dashboard after each change.
+4.  Select the "Stale telemetry" scenario and wait about 10 seconds.
+5.  Repeat step 1 at a small mobile width (320–375 px).
+
+### Expected Result
+
+-   A value such as "3.16 kW" sits on the highlighted path between the
+    active source and the ATS, in a pill outlined in the source color.
+    Inactive paths show no value. The Load shows its own power.
+-   Step 2: the value updates with the telemetry.
+-   Step 3: during "Switching…" the value disappears; afterwards it is
+    shown on the new active path (it moves there; with reduced motion it
+    appears there without movement).
+-   Step 4: the value is removed (not shown as current while stale).
+-   Step 5: the value is readable and stays inside the diagram.
+-   A user without Power Monitoring sees the diagram without values.
+
+------------------------------------------------------------------------
+
+## ST-040: Custom Picker
+
+### Steps
+
+1.  Open the "Mock scenario" picker in the sidebar (in the navigation
+    drawer on small screens) with the mouse or by tapping.
+2.  Close it by clicking outside, then open it with the keyboard (Tab to
+    it, press Enter or Arrow Down).
+3.  Move with Arrow Up/Down, Home and End; type a letter (e.g. "S").
+4.  Press Escape; open again and select an option with Enter.
+5.  Repeat on the HMI "Target source" picker and an Administration
+    "Feature access" picker, in both themes.
+
+### Expected Result
+
+-   The popup matches the application design (no browser-native menu),
+    the selected option has a check mark, the highlighted option is
+    clearly visible, and the popup stays inside the screen (it opens
+    upwards near the bottom).
+-   Clicking outside closes it without selecting.
+-   Arrow keys, Home/End and typing a letter move the highlight; Enter
+    (or Space) selects and closes; focus returns to the picker.
+-   Escape closes it without selecting and, inside the navigation
+    drawer, does not close the drawer.
+-   Disabled options (e.g. the active source) cannot be selected and show
+    the reason.
+-   No horizontal scrolling at any screen width.
+
+------------------------------------------------------------------------
+
+## ST-041: Search in Large Pickers
+
+### Prerequisite
+
+A picker with more than 10 options. The current application pickers have
+10 or fewer options, so this behavior is covered by the automated tests
+(`src/components/Picker.test.jsx`) until such a list exists.
+
+### Steps
+
+1.  Open a picker with more than 10 options.
+2.  Type part of an option name in a different letter case.
+3.  Type text that matches nothing.
+4.  Open a picker with 10 or fewer options.
+
+### Expected Result
+
+-   Step 1: a search field appears at the top of the popup and has focus.
+-   Step 2: the list is filtered case-insensitively; the selected option
+    keeps its check mark when visible; Enter selects the highlighted
+    match.
+-   Step 3: "No options match your search." is shown.
+-   Step 4: no search field is shown.
+
+------------------------------------------------------------------------
+
+## ST-042: Stable Loading States
+
+### Steps
+
+1.  Reload the application on the Dashboard.
+2.  Navigate to Financial, switch between Daily, Monthly and Yearly.
+3.  Return to the Dashboard; open HMI and Administration.
+4.  Send an HMI command.
+
+### Expected Result
+
+-   Step 1: one loading animation is shown while the application starts
+    ("Loading ATS Dashboard…" / "Loading session…" / "Connecting to
+    ATS…" in the same place); it does not restart or appear twice, and
+    the Dashboard then appears without further page loaders. Only the
+    independent "Today's energy cost" section may show its own small
+    loader.
+-   Step 2: the first visit shows one page loader (plus a small loader
+    for transition metrics); period changes keep the current values on
+    screen with a small "Updating…" indicator.
+-   Step 3: returning to the Dashboard shows no loader; short loads show
+    no loader at all and nothing flickers.
+-   Step 4: the command shows one processing indicator from "Pending" to
+    the result.
 
 ------------------------------------------------------------------------
 

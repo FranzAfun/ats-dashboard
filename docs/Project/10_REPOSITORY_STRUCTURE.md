@@ -213,6 +213,12 @@ features/
 Authentication-related services live in `services/auth/`; no
 `features/auth/` folder is needed until a login flow exists.
 
+## `src/test/`
+
+Test setup only (`setup.js` registers the DOM matchers used by component
+tests). Tests themselves live next to the code they test
+(`*.test.js` / `*.test.jsx`).
+
 ## `src/hooks/`
 
 Reusable React hooks.
