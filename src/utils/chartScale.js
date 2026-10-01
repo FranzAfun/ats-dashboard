@@ -10,3 +10,20 @@ export function niceTicks(max, count = 4) {
   for (let value = 0; value <= top + step / 2; value += step) ticks.push(Math.round(value * 1e6) / 1e6)
   return ticks
 }
+
+/**
+ * Splits points ({ value }) into runs of non-null values so missing
+ * values are drawn as gaps, never as zero.
+ */
+export function splitAtGaps(points) {
+  const runs = []
+  let current = []
+  for (const point of points) {
+    if (point.value === null) {
+      if (current.length) runs.push(current)
+      current = []
+    } else current.push(point)
+  }
+  if (current.length) runs.push(current)
+  return runs
+}

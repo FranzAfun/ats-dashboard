@@ -916,6 +916,28 @@ A picker with more than 10 options. The current application pickers have
 
 ------------------------------------------------------------------------
 
+## ST-043: Live Load Power Trend
+
+### Steps
+
+1.  Open Power and wait about 10 seconds.
+2.  Hover over the "Load power trend" chart, or Tab to it and use the
+    left/right arrow keys.
+3.  Leave the page and open it again.
+
+### Expected Result
+
+-   The chart is described as live samples since the page was opened
+    (not stored history) and shows a summary with latest, minimum and
+    maximum values.
+-   A crosshair and tooltip show the value and time of the nearest
+    sample without hiding the line.
+-   After returning, the trend starts again (samples are not joined
+    across the time the page was closed).
+-   Missing values appear as gaps, not as zero.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:

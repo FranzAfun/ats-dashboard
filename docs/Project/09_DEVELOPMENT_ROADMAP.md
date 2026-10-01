@@ -393,8 +393,10 @@ A milestone is complete when:
   3 Access and mock data foundation       Done (mock access backend)
   4 Motion and interaction foundation     Done (SPEC.md §25)
   5 Dashboard                             Done with mock data
-  6 Power parameters                      Done with mock data (no trend charts:
-                                          historical telemetry source TBD)
+  6 Power parameters                      Done with mock data; live load-power
+                                          trend from received samples (stored
+                                          historical trends wait on the TBD
+                                          historical data source)
   7 Condition awareness                   Done with mock data
   8 Financial analytics                   Done with mock/demo calculations
   9 HMI controls                          Done against the mock command adapter

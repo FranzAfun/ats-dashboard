@@ -2,6 +2,8 @@ import DataState from '../components/DataState.jsx'
 import FreshnessBadge from '../components/FreshnessBadge.jsx'
 import PageHeader from '../components/PageHeader.jsx'
 import { sources } from '../config/sources.config.js'
+import Panel from '../components/Panel.jsx'
+import LoadTrendChart from '../features/power/LoadTrendChart.jsx'
 import TelemetryCard from '../features/power/TelemetryCard.jsx'
 import NotLiveNotice from '../features/shared/NotLiveNotice.jsx'
 import { describeSourceState } from '../features/shared/sourceState.js'
@@ -29,6 +31,12 @@ function PowerPage() {
             </div>
             <NotLiveNotice timestamp={data.timestamp} />
             <TelemetryCard title="Load" telemetry={data.load} wide />
+            <Panel
+              title="Load power trend"
+              description="Live samples received since this page was opened (not stored history)."
+            >
+              <LoadTrendChart />
+            </Panel>
             <div className="grid gap-4 lg:grid-cols-3">
               {sources.map((source) => (
                 <TelemetryCard
