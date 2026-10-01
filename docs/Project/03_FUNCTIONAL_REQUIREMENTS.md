@@ -220,6 +220,12 @@ analytics/history data.
 The export format and exact data range are to be finalized during
 implementation planning.
 
+Interim implementation: a client-side CSV export of the cost trend and
+source energy/cost for the selected period, available only with the
+`financial.export` permission and the `financialAnalytics` and
+`dataExport` features. Mock exports are prefixed `MOCK-` and labelled
+inside the file. The production format and range remain TBD.
+
 ------------------------------------------------------------------------
 
 # 7. Condition Awareness

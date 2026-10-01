@@ -631,6 +631,42 @@ Select "Mock Disabled User".
 
 ------------------------------------------------------------------------
 
+## ST-032: Financial Analytics Periods
+
+### Steps
+
+1.  As "Mock Viewer", open Financial.
+2.  Switch between Daily, Monthly and Yearly.
+3.  Hover over (or Tab to) a column in the cost trend chart.
+4.  Select "Show table".
+
+### Expected Result
+
+-   A "Demo calculations" notice states that values are mock data.
+-   Summary, cost trend, source usage, source costs and power-factor
+    losses update for the selected period.
+-   The tooltip lists each source's cost and the total for that period.
+-   The table view shows the same values as the chart.
+-   ATS transition metrics and recent transitions are shown (cards on
+    small screens, a table on wider screens).
+
+------------------------------------------------------------------------
+
+## ST-033: Financial Export Permission
+
+### Steps
+
+1.  As "Mock Viewer", open Financial.
+2.  Switch to "Mock Analyst" and select "Export CSV".
+
+### Expected Result
+
+-   Step 1: no "Export CSV" button is shown.
+-   Step 2: a CSV file named `MOCK-ats-financial-<period>-<date>.csv`
+    downloads; it starts with a "MOCK DATA" line.
+
+------------------------------------------------------------------------
+
 ## Maintenance Rule
 
 When a new completed feature introduces an important user flow:
