@@ -36,7 +36,7 @@ function RolesSection() {
               {canManage && ownRole && (
                 <p className="text-sm text-muted">You cannot change the permissions of your own role.</p>
               )}
-              <fieldset disabled={!editable || mutation.saving}>
+              <fieldset disabled={!editable || mutation.saving || Boolean(roles.refreshing)}>
                 <legend className="mb-2 text-xs font-semibold tracking-wide text-muted uppercase">Permissions</legend>
                 <ul className="grid gap-1 sm:grid-cols-2">
                   {permissions.map((permission) => {

@@ -34,12 +34,12 @@ function UsersSection() {
   }
 
   const load = useCallback(async () => {
-    const users = await adminService.listUsers()
     // Role labels need admin.permissions.view; otherwise use the role ids in use.
-    const roles = hasPermission('admin.permissions.view')
-      ? await adminService.listRoles()
-      : [...new Set(users.map((u) => u.role))].map((id) => ({ id, label: id }))
-    return { users, roles }
+    const [users, roles] = await Promise.all([
+      adminService.listUsers(),
+      hasPermission('admin.permissions.view') ? adminService.listRoles() : null,
+    ])
+    return { users, roles: roles ?? [...new Set(users.map((u) => u.role))].map((id) => ({ id, label: id })) }
   }, [hasPermission])
   const data = useAdminData(load, 'users')
 
@@ -84,7 +84,7 @@ function UsersSection() {
                 {selected ? (
                   <>
                     <h3 className="mb-3 text-base font-semibold text-text">{selected.name}</h3>
-                    <UserDetail key={selected.id} user={selected} roleOptions={roles} />
+                    <UserDetail key={selected.id} user={selected} roleOptions={roles} refreshing={Boolean(data.refreshing)} />
                   </>
                 ) : (
                   <p className="text-sm text-muted">Select a user to review or manage their access.</p>

@@ -1,5 +1,6 @@
 import { useCallback, useId } from 'react'
 import DataState from '../../components/DataState.jsx'
+import LoadingState from '../../components/LoadingState.jsx'
 import StatusIndicator from '../../components/StatusIndicator.jsx'
 import { features, permissions } from '../../config/access.config.js'
 import { useAccess } from '../../hooks/useAccess.js'
@@ -31,13 +32,15 @@ function withOverride(user, featureId, mode) {
  * Manage one user: account (admin.users.manage), feature access
  * (admin.features.manage) and effective-access review (admin.users.view).
  */
-function UserDetail({ user, roleOptions }) {
+function UserDetail({ user, roleOptions, refreshing }) {
   const { canPerform, user: me } = useAccess()
   const roleId = useId()
   const isSelf = user.id === me?.id
   const canManageUser = canPerform('admin.users.manage') && !isSelf
   const canManageFeatures = canPerform('admin.features.manage') && !isSelf
   const mutation = useMutation()
+  // Keep controls disabled until refreshed data confirms the change.
+  const busy = mutation.saving || refreshing
   const loadAccess = useCallback(() => adminService.getEffectiveAccess(user.id), [user.id])
   const effective = useAdminData(loadAccess, `effective:${user.id}`)
 
@@ -55,7 +58,7 @@ function UserDetail({ user, roleOptions }) {
                 id={roleId}
                 className={selectClass}
                 value={user.role}
-                disabled={mutation.saving}
+                disabled={busy}
                 onChange={(e) => mutation.mutate(() => adminService.updateUser(user.id, { role: e.target.value }))}
               >
                 {roleOptions.map((role) => (
@@ -67,7 +70,7 @@ function UserDetail({ user, roleOptions }) {
               <span className="text-xs text-muted">Status</span>
               <button
                 type="button"
-                disabled={mutation.saving}
+                disabled={busy}
                 onClick={() =>
                   mutation.mutate(() =>
                     adminService.updateUser(user.id, { status: user.status === 'active' ? 'disabled' : 'active' }),
@@ -100,7 +103,7 @@ function UserDetail({ user, roleOptions }) {
                   id={`${user.id}-${feature.id}`}
                   className={selectClass}
                   value={overrideFor(user, feature.id)}
-                  disabled={mutation.saving}
+                  disabled={busy}
                   onChange={(e) =>
                     mutation.mutate(() => adminService.updateUser(user.id, withOverride(user, feature.id, e.target.value)))
                   }
@@ -115,6 +118,7 @@ function UserDetail({ user, roleOptions }) {
         </section>
       )}
 
+      {busy && <LoadingState size="inline" orb="working" message="Updating…" />}
       <MutationError error={mutation.error} />
 
       <section className="grid gap-2">

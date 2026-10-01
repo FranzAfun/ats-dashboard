@@ -37,7 +37,7 @@ function FeatureFlagsSection() {
                     <Switch
                       checked={data[feature.id] === true}
                       label={`${feature.label} enabled`}
-                      disabled={mutation.saving}
+                      disabled={mutation.saving || Boolean(flags.refreshing)}
                       onChange={(enabled) => mutation.mutate(() => adminService.setFeatureFlag(feature.id, enabled))}
                     />
                   ) : (
