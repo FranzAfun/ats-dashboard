@@ -607,8 +607,8 @@ Shared application data structures should be kept in one dedicated
 location within the structure defined in `10_REPOSITORY_STRUCTURE.md`.
 
 `src/data/` is reserved for development and mock data, so shared
-data-structure definitions do not belong there. The exact location will
-be decided when the first shared definitions are introduced and then
+data-structure definitions do not belong there. They live at the
+integration boundary in `src/services/integration/contract.js`, as
 recorded in `10_REPOSITORY_STRUCTURE.md`.
 
 Because the project uses JavaScript, the application should use clear

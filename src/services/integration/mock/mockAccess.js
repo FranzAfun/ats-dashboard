@@ -166,6 +166,9 @@ export function createMockAccess() {
         return clone(db.get().roles)
       }),
 
+    // Used by other mock domains to enforce authorization.
+    currentAccess: () => effectiveAccessFor(db.get().currentUserId),
+
     // Mock-only: switch the simulated signed-in user.
     mockUsers: () => db.get().users.map(({ id, name, role, status }) => ({ id, name, role, status })),
     currentMockUserId: () => db.get().currentUserId,

@@ -1,13 +1,14 @@
 import { isMockData } from '../../services/integration/adapter.js'
 import { useAccess } from '../../hooks/useAccess.js'
 import MockDataBadge from '../dev/MockDataBadge.jsx'
+import MockScenarioControl from '../dev/MockScenarioControl.jsx'
 import MockSessionControl from '../dev/MockSessionControl.jsx'
 
 /**
  * Footer of the sidebar/drawer: signed-in user and, in mock mode, the
  * development controls.
  */
-function ShellPanel({ children }) {
+function ShellPanel() {
   const { user } = useAccess()
 
   return (
@@ -22,7 +23,7 @@ function ShellPanel({ children }) {
         <div className="flex flex-col gap-3 rounded-md border border-border bg-canvas p-3">
           <MockDataBadge />
           <MockSessionControl />
-          {children}
+          <MockScenarioControl />
         </div>
       )}
     </div>

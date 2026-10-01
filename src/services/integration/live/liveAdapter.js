@@ -38,8 +38,34 @@ export function createLiveAdapter() {
       updateUser: notConfigured,
       setFeatureFlag: notConfigured,
       setRolePermission: notConfigured,
+      getEffectiveAccess: notConfigured,
     },
+    connection: {
+      get: () => 'error',
+      subscribe: () => () => {},
+    },
+    telemetry: {
+      subscribeSystemStatus: notConfiguredSubscription,
+      subscribePowerTelemetry: notConfiguredSubscription,
+    },
+    alerts: {
+      subscribeAlarms: notConfiguredSubscription,
+    },
+    hmi: {
+      subscribeControlState: notConfiguredSubscription,
+    },
+    commands: {
+      // Never pretend a command was applied when there is no integration.
+      send: notConfigured,
+    },
+    analytics: {
+      getCostTrend: notConfigured,
+      getSourceUsage: notConfigured,
+      getEnergyAndCost: notConfigured,
+      getPowerFactorLosses: notConfigured,
+      getTransitionMetrics: notConfigured,
+      getTransitionEvents: notConfigured,
+    },
+    mockScenario: null,
   }
 }
-
-export { notConfigured, notConfiguredSubscription }

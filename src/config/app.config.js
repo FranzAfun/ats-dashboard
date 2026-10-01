@@ -22,3 +22,10 @@ export const dataSourceConfigError =
   requestedSource !== undefined && !DATA_SOURCES.includes(requestedSource)
     ? `Unsupported VITE_DATA_SOURCE "${requestedSource}". Expected "mock" or "live".`
     : null
+
+/**
+ * Data-freshness threshold: telemetry older than this is shown as STALE.
+ * DEVELOPMENT DEFAULT ONLY — the production threshold is TBD and must be
+ * agreed during integration (04_DATA_CONTRACT.md §17).
+ */
+export const staleAfterMs = 10_000

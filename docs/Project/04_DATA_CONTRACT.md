@@ -700,7 +700,47 @@ unconfirmed.
 
 ------------------------------------------------------------------------
 
-# 25. Implementation Rule
+# 25. Frontend Implementation of the Contract
+
+The contract is implemented as JSDoc definitions and boundary validation
+in `src/services/integration/contract.js`. Services validate adapter
+data before it reaches the UI; invalid data becomes an `INVALID_DATA`
+error, and missing numeric values stay `null`.
+
+The frontend groups the proposed structures into these application
+streams. They are **proposed application structures**, implemented by
+the mock adapter only. The live mapping is TBD.
+
+  Stream / call              Contents (sections of this document)
+  -------------------------- -----------------------------------------------
+  System status (live)       timestamp, activeSource, sourceStatus (§5),
+                             ats (§6), tariff (§8), temperature (§7)
+  Power telemetry (live)     timestamp, sources keyed by id (§3), load (§4.1)
+  Alarms (live)              list of alarms, active and cleared (§12)
+  HMI control state (live)   timestamp, inputCostPerDay per source
+                             `{ value, currency, period: "day" }`
+  Commands                   requests (§13), responses (§14); progress
+                             updates are delivered until a final status
+  Cost trend                 `{ period, currency, total: TimePoint[],
+                             bySource: { [source]: TimePoint[] } }` (§16)
+  Source usage               §10
+  Energy and cost            `{ period, periodStart, sources: [§9 objects],
+                             totalEnergy, totalCost, currency }`
+  Power-factor losses        `{ period, averagePowerFactor,
+                             targetPowerFactor, estimatedLoss, currency }`
+  Transition metrics/events  §11
+
+Splitting status and power telemetry lets the application avoid
+requesting power telemetry for users without the Power Monitoring
+feature.
+
+The "input cost/day" value is shown and updated per source as proposed
+in §13. Its exact production meaning, and how it relates to the tariff,
+is TBD.
+
+------------------------------------------------------------------------
+
+# 26. Implementation Rule
 
 Do not treat the proposed structures in this document as confirmed
 device payloads.

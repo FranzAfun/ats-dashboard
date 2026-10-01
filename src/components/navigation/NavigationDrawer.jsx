@@ -12,7 +12,7 @@ const DESKTOP_MEDIA_QUERY = '(min-width: 64rem)'
  * which provides focus containment, Escape handling, an inert
  * background and focus restoration on close.
  */
-function NavigationDrawer({ open, onClose, footer }) {
+function NavigationDrawer({ open, onClose }) {
   const dialogRef = useRef(null)
 
   useEffect(() => {
@@ -67,7 +67,7 @@ function NavigationDrawer({ open, onClose, footer }) {
         <nav aria-label="Primary" className="flex-1 overflow-y-auto p-3">
           <NavigationList onNavigate={onClose} />
         </nav>
-        <ShellPanel>{footer}</ShellPanel>
+        <ShellPanel />
       </div>
     </dialog>
   )

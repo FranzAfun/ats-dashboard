@@ -11,15 +11,23 @@ import { createMockAdapter } from './mock/mockAdapter.js'
  *              ↓
  *            UI
  *
- * Both adapters implement the same interface:
+ * Both adapters implement the same interface. Data shapes are defined in
+ * ./contract.js (04_DATA_CONTRACT.md).
  *
  * kind: "mock" | "live"
- * access:
- *   getSession(): Promise<EffectiveAccess>
- *   subscribe(listener): unsubscribe — notified when access data changes
- *   listUsers(), listRoles(), getFeatureFlags(), getEffectiveAccess(userId)
- *   updateUser(userId, changes), setFeatureFlag(id, enabled),
- *   setRolePermission(roleId, permission, granted)
+ * access:      getSession, subscribe, listUsers, listRoles, getFeatureFlags,
+ *              getEffectiveAccess, updateUser, setFeatureFlag, setRolePermission
+ * connection:  get(): "connecting"|"connected"|"disconnected"|"error",
+ *              subscribe(listener)
+ * telemetry:   subscribeSystemStatus(onData, onError) → unsubscribe
+ *              subscribePowerTelemetry(onData, onError) → unsubscribe
+ * alerts:      subscribeAlarms(onData, onError) → unsubscribe
+ * hmi:         subscribeControlState(onData, onError) → unsubscribe
+ * commands:    send(command, onUpdate) → Promise<final CommandResponse>
+ * analytics:   getCostTrend(period), getSourceUsage(period),
+ *              getEnergyAndCost(period), getPowerFactorLosses(period),
+ *              getTransitionMetrics(), getTransitionEvents()
+ * mockScenario: development scenario controls (mock only, otherwise null)
  *
  * UI code must not import adapters directly; it uses the services.
  */

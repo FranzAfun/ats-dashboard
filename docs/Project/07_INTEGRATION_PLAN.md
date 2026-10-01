@@ -848,7 +848,48 @@ stable.
 
 ------------------------------------------------------------------------
 
-# 29. Integration Completion Criteria
+# 29. Frontend Implementation Status
+
+The integration boundary is implemented in `src/services/integration/`:
+
+  File / folder                Purpose
+  ---------------------------- ---------------------------------------------
+  `adapter.js`                 Adapter interface and selection
+  `contract.js`                JSDoc contract and boundary validation
+  `errors.js`                  Normalized error categories (§19)
+  `mock/`                      Mock adapter (development/demo only)
+  `live/liveAdapter.js`        Live adapter placeholder — NOT IMPLEMENTED
+
+`VITE_DATA_SOURCE` selects the adapter (`mock` or `live`). Development
+defaults to `mock`; production builds default to `live`, so mock data
+never silently becomes production data. The mock adapter is always
+indicated in the UI with a "Mock data" badge.
+
+The live adapter rejects every call with `NOT_CONFIGURED`. The UI then
+shows "not configured" states instead of data. No transport, endpoint,
+MQTT topic, Modbus register or Node-RED command has been invented.
+
+Implemented frontend behavior that the live adapter must support:
+
+-   Connection states: connecting, connected, disconnected, error.
+-   Freshness: data older than the stale threshold is shown as STALE.
+    The threshold is a development default (`staleAfterMs` in
+    `src/config/app.config.js`); the production value is TBD.
+-   Commands report progress (`pending` → `accepted` → final) and are
+    never retried automatically. The UI only reports success after an
+    `applied` response.
+-   The mock adapter checks authorization for commands and admin
+    operations, as the production layer must.
+
+### Mock scenarios
+
+In mock mode a "Mock scenario" control exercises: normal operation,
+active alarms, stale telemetry, disconnection, integration errors,
+missing/empty data, rejected commands and failed commands.
+
+------------------------------------------------------------------------
+
+# 30. Integration Completion Criteria
 
 The integration is ready for production implementation when:
 

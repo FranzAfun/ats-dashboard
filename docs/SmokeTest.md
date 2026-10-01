@@ -41,6 +41,22 @@ drawer on smaller screens).
 The selection is remembered in the browser. Admin changes to mock users
 and feature flags last until the page is reloaded.
 
+## Mock Scenarios
+
+The "Mock scenario" selector (below the mock user selector) changes the
+simulated system state:
+
+  Scenario               Use for
+  ---------------------- ----------------------------------------------
+  Normal operation       Default state
+  Active alarms          Alarm banner and alerts (ST-011)
+  Stale telemetry        Stale data indication (ST-027)
+  Disconnected           Connection loss (ST-027)
+  Integration error      Error states (ST-015)
+  Missing / empty data   Missing values and empty states (ST-008)
+  Commands rejected      HMI rejection feedback
+  Commands fail          HMI failure feedback
+
 ------------------------------------------------------------------------
 
 ## ST-001: Application Starts
@@ -512,6 +528,25 @@ Select "Mock Disabled User".
 
 -   Administration disappears from the navigation.
 -   The current page changes to "Access denied" without a reload.
+
+------------------------------------------------------------------------
+
+## ST-027: Connection and Freshness
+
+### Steps
+
+1.  Open the Dashboard and note the connection status ("Connected").
+2.  Select the "Stale telemetry" scenario and wait about 10 seconds.
+3.  Select "Disconnected".
+4.  Select "Normal operation".
+
+### Expected Result
+
+-   Step 2: telemetry is marked as stale; values are not presented as
+    live.
+-   Step 3: the connection status shows "Disconnected" and telemetry is
+    marked as disconnected.
+-   Step 4: the status returns to "Connected" and data is live again.
 
 ------------------------------------------------------------------------
 

@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import BrandMark from '../components/BrandMark.jsx'
 import { buttonClasses } from '../components/buttonClasses.js'
+import ConnectionStatus from '../components/ConnectionStatus.jsx'
 import MockDataBadge from '../components/dev/MockDataBadge.jsx'
 import NavigationDrawer from '../components/navigation/NavigationDrawer.jsx'
 import NavigationList from '../components/navigation/NavigationList.jsx'
@@ -27,8 +28,9 @@ function AppLayout() {
       </a>
 
       <aside className="hidden border-r border-border bg-surface lg:fixed lg:inset-y-0 lg:flex lg:w-60 lg:flex-col">
-        <div className="flex min-h-16 items-center border-b border-border px-5">
+        <div className="flex min-h-16 flex-col justify-center gap-1 border-b border-border px-5 py-3">
           <BrandMark />
+          <ConnectionStatus />
         </div>
         <nav aria-label="Primary" className="flex-1 overflow-y-auto p-3">
           <NavigationList />
@@ -59,7 +61,10 @@ function AppLayout() {
           </svg>
         </button>
         <BrandMark />
-        <span className="ml-auto pr-2">
+        <span className="ml-auto flex items-center gap-2 pr-2">
+          <span className="hidden sm:inline">
+            <ConnectionStatus />
+          </span>
           <MockDataBadge />
         </span>
       </header>

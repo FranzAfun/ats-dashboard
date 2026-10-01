@@ -279,6 +279,26 @@ services/
 The service layer must hide transport-specific implementation details
 from UI components.
 
+Implemented layout:
+
+```text
+services/
+├── alerts/          alarms resource
+├── analytics/       financial/energy analytics
+├── auth/            session and mock session controls
+├── commands/        HMI commands and control state
+├── telemetry/       system status, power telemetry, connection
+└── integration/
+    ├── adapter.js   adapter interface and selection (VITE_DATA_SOURCE)
+    ├── contract.js  shared data-structure definitions (JSDoc) and validation
+    ├── errors.js    normalized integration errors
+    ├── mock/        mock adapter behavior (data comes from src/data/mock/)
+    └── live/        live adapter placeholder (transport TBD)
+```
+
+Shared application data-structure definitions live in
+`services/integration/contract.js`.
+
 For example, components should request telemetry through an application
 service rather than knowing MQTT, Modbus, HTTP, WebSocket, or another
 transport directly.
