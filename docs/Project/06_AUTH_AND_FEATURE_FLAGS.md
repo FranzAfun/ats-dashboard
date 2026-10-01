@@ -517,12 +517,14 @@ Has access?
    └── NO  → deny / redirect
 ```
 
-The exact unauthorized behavior will be defined during implementation.
+### Implemented behavior
 
-Possible behavior:
+Direct access to a page the user cannot access renders an "Access
+denied" page at the requested URL. The restricted page component is not
+rendered, so its data is never requested. The access-denied page links
+to the first page the user can access.
 
--   Redirect to Dashboard
--   Show an unauthorized page
+Unknown page, action or section identifiers are denied (fail closed).
 
 ------------------------------------------------------------------------
 
@@ -894,7 +896,67 @@ The implementation must follow these principles:
 
 ------------------------------------------------------------------------
 
-# 32. Current Status
+# 32. Frontend Implementation (Mock)
+
+The access model is implemented in the frontend against a mock access
+backend. Production authentication and authorization remain TBD.
+
+  Concern                     Location
+  --------------------------- ------------------------------------------
+  Permission/feature catalog  `src/config/access.config.js`
+  Page/section/action rules   `src/config/access.config.js`
+  Evaluation helpers          `src/utils/access.js`
+  React access helpers        `src/app/AccessProvider.jsx`,
+                              `src/hooks/useAccess.js`
+  Route protection            `src/routes/PageAccessGuard.jsx`
+  Section/action rendering    `src/components/access/`
+  Mock users/roles/flags      `src/data/mock/access.mock.js`
+  Mock access backend         `src/services/integration/mock/mockAccess.js`
+
+### Evaluation rules
+
+-   Page: user holds the page permission AND every required feature is
+    in the user's effective features.
+-   Dashboard section: same requirement as the corresponding page.
+-   Action: user holds the action permission AND the feature of the
+    area it belongs to (export requires `financialAnalytics` and
+    `dataExport`).
+
+### Mock inheritance model (development only)
+
+``` text
+permissions = role permissions + user grants - user revocations
+features    = (role features + user grants - user revocations)
+              ∩ globally enabled feature flags
+disabled user → no permissions and no features
+```
+
+This model exists so the UI can be developed and tested. It is not a
+confirmed production rule.
+
+### Mock backend enforcement
+
+The mock access backend checks the current user's permissions on every
+administrative read and write and rejects unauthorized calls with
+`FORBIDDEN`. It also prevents an administrator from changing their own
+account or their own role's permissions, so the mock cannot lock itself
+out. A production backend must enforce authorization independently.
+
+### Mock users
+
+  User                         Role       Purpose
+  ---------------------------- ---------- ------------------------------------
+  Mock Administrator           admin      Full access including administration
+  Mock Operator                operator   Operational access with HMI actions
+  Mock Viewer                  viewer     Read-only monitoring and analytics
+  Mock HMI Observer            operator   HMI page access without HMI actions
+  Mock Viewer (no Financial)   viewer     Financial Analytics feature revoked
+  Mock Analyst                 viewer     Export permission and feature granted
+  Mock Disabled User           viewer     Disabled account, no access
+
+------------------------------------------------------------------------
+
+# 33. Current Status
 
 ### Confirmed Direction
 

@@ -1,8 +1,12 @@
 import { useCallback, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import BrandMark from '../components/BrandMark.jsx'
+import { buttonClasses } from '../components/buttonClasses.js'
+import MockDataBadge from '../components/dev/MockDataBadge.jsx'
 import NavigationDrawer from '../components/navigation/NavigationDrawer.jsx'
 import NavigationList from '../components/navigation/NavigationList.jsx'
+import ShellPanel from '../components/navigation/ShellPanel.jsx'
+import SessionBoundary from './SessionBoundary.jsx'
 
 /**
  * Responsive application shell.
@@ -29,15 +33,16 @@ function AppLayout() {
         <nav aria-label="Primary" className="flex-1 overflow-y-auto p-3">
           <NavigationList />
         </nav>
+        <ShellPanel />
       </aside>
 
-      <header className="sticky top-0 z-10 flex min-h-14 items-center gap-2 border-b border-border bg-surface px-2 lg:hidden">
+      <header className="sticky top-0 z-20 flex min-h-14 items-center gap-2 border-b border-border bg-surface px-2 lg:hidden">
         <button
           type="button"
           onClick={() => setDrawerOpen(true)}
           aria-haspopup="dialog"
           aria-expanded={drawerOpen}
-          className="inline-flex size-11 items-center justify-center rounded-md text-muted transition-colors duration-150 hover:bg-raised hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none"
+          className={buttonClasses.icon}
         >
           <span className="sr-only">Open navigation</span>
           <svg
@@ -54,13 +59,18 @@ function AppLayout() {
           </svg>
         </button>
         <BrandMark />
+        <span className="ml-auto pr-2">
+          <MockDataBadge />
+        </span>
       </header>
 
       <NavigationDrawer open={drawerOpen} onClose={closeDrawer} />
 
       <main id="main-content" tabIndex={-1} className="focus:outline-none lg:pl-60">
         <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <Outlet />
+          <SessionBoundary>
+            <Outlet />
+          </SessionBoundary>
         </div>
       </main>
     </div>

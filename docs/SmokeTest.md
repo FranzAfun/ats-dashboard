@@ -21,15 +21,25 @@ npm run dev
 
 Use mock data until live integration is confirmed.
 
-## Current Implementation Status
+## Mock Users
 
-The application foundation (responsive shell, navigation and routing)
-is implemented. Page content, the access model, mock data, and
-animation are not implemented yet.
+In development the application uses the mock adapter. A "Mock data"
+badge is always visible, and the signed-in user is chosen with the
+"Mock user" selector at the bottom of the sidebar (inside the navigation
+drawer on smaller screens).
 
-Until the access model is implemented, every navigation item is shown
-to every user. The access tests (ST-004 to ST-007, ST-013, ST-019 and
-ST-020) cannot be run yet.
+  Mock user                    Use for
+  ---------------------------- ------------------------------------------
+  Mock Administrator           Admin flows (ST-019)
+  Mock Operator                HMI flows (ST-012)
+  Mock Viewer                  Page restriction (ST-004: no HMI, no Admin)
+  Mock HMI Observer            Action restriction (ST-005, ST-013)
+  Mock Viewer (no Financial)   Feature flag off (ST-006)
+  Mock Analyst                 Export action
+  Mock Disabled User           Disabled account (ST-025)
+
+The selection is remembered in the browser. Admin changes to mock users
+and feature flags last until the page is reloaded.
 
 ------------------------------------------------------------------------
 
@@ -471,6 +481,37 @@ Use a viewport narrower than 1024px.
 
 -   A "Skip to content" link becomes visible on the first Tab.
 -   Pressing Enter moves focus to the main content area.
+
+------------------------------------------------------------------------
+
+## ST-025: Disabled Account
+
+### Prerequisite
+
+Select "Mock Disabled User".
+
+### Steps
+
+1.  Open any page, including a direct URL such as `/power`.
+
+### Expected Result
+
+-   No navigation items are shown.
+-   An "Account disabled" message is shown instead of page content.
+
+------------------------------------------------------------------------
+
+## ST-026: Access Changes Apply Immediately
+
+### Steps
+
+1.  As "Mock Administrator", open `/admin`.
+2.  Switch the mock user to "Mock Viewer".
+
+### Expected Result
+
+-   Administration disappears from the navigation.
+-   The current page changes to "Access denied" without a reload.
 
 ------------------------------------------------------------------------
 

@@ -8,11 +8,12 @@ import FinancialPage from '../pages/FinancialPage.jsx'
 import HmiPage from '../pages/HmiPage.jsx'
 import NotFoundPage from '../pages/NotFoundPage.jsx'
 import PowerPage from '../pages/PowerPage.jsx'
+import PageAccessGuard from './PageAccessGuard.jsx'
 import RouteErrorBoundary from './RouteErrorBoundary.jsx'
 
 /*
- * Route protection (page access) is added with the access model
- * (09_DEVELOPMENT_ROADMAP.md, Phase 3).
+ * Each protected route declares `handle.pageId`; PageAccessGuard checks it
+ * against the centralized page-access rules (config/access.config.js).
  */
 export const router = createBrowserRouter([
   {
@@ -22,15 +23,16 @@ export const router = createBrowserRouter([
     children: [
       {
         // Pathless route so page errors render inside the application shell.
+        Component: PageAccessGuard,
         ErrorBoundary: RouteErrorBoundary,
         children: [
           { index: true, loader: () => redirect(paths.dashboard) },
-          { path: paths.dashboard, Component: DashboardPage },
-          { path: paths.power, Component: PowerPage },
-          { path: paths.financial, Component: FinancialPage },
-          { path: paths.alerts, Component: AlertsPage },
-          { path: paths.hmi, Component: HmiPage },
-          { path: paths.admin, Component: AdminPage },
+          { path: paths.dashboard, Component: DashboardPage, handle: { pageId: 'dashboard' } },
+          { path: paths.power, Component: PowerPage, handle: { pageId: 'power' } },
+          { path: paths.financial, Component: FinancialPage, handle: { pageId: 'financial' } },
+          { path: paths.alerts, Component: AlertsPage, handle: { pageId: 'alerts' } },
+          { path: paths.hmi, Component: HmiPage, handle: { pageId: 'hmi' } },
+          { path: paths.admin, Component: AdminPage, handle: { pageId: 'admin' } },
           { path: '*', Component: NotFoundPage },
         ],
       },

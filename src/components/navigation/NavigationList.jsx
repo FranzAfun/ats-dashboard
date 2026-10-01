@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { navigationItems } from '../../config/navigation.config.js'
+import { useAccess } from '../../hooks/useAccess.js'
 
 function linkClassName({ isActive }) {
   const base =
@@ -11,13 +12,16 @@ function linkClassName({ isActive }) {
 }
 
 /**
- * Primary navigation links. Used by the desktop sidebar and the mobile
+ * Primary navigation links, filtered by page access. Used by the desktop sidebar and the mobile
  * navigation drawer. NavLink sets aria-current="page" on the active item.
  */
 function NavigationList({ onNavigate }) {
+  const { canAccessPage } = useAccess()
+  const items = navigationItems.filter((item) => canAccessPage(item.pageId))
+
   return (
     <ul className="flex flex-col gap-1">
-      {navigationItems.map((item) => (
+      {items.map((item) => (
         <li key={item.id}>
           <NavLink to={item.path} className={linkClassName} onClick={onNavigate}>
             {item.label}

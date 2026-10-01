@@ -251,11 +251,20 @@ npm ci
 | `npm run preview` | Serve the production build locally |
 | `npm run lint` | Run ESLint |
 
-No automated test runner is configured yet. Manual flow tests are documented in [`docs/SmokeTest.md`](docs/SmokeTest.md).
+Manual flow tests are documented in [`docs/SmokeTest.md`](docs/SmokeTest.md).
 
-### Data
+### Data source
 
-Live Node-RED integration is not implemented. The application must not be pointed at production devices. Development uses mock data behind the application service layer once that layer exists.
+`VITE_DATA_SOURCE` selects the integration adapter:
+
+| Value | Behavior |
+| --- | --- |
+| `mock` | Development/demo data. A "Mock data" badge is always shown. |
+| `live` | Production integration adapter. **Not implemented yet** — the transport is TBD, so the app shows "not configured" states. |
+
+When unset, `npm run dev` uses `mock` and production builds use `live`, so a production build never silently shows mock data. To build a demo with mock data, set `VITE_DATA_SOURCE=mock` explicitly.
+
+Live Node-RED integration is not implemented. The application must not be pointed at production devices.
 
 ---
 

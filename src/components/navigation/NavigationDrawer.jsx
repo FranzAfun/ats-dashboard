@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import BrandMark from '../BrandMark.jsx'
+import { buttonClasses } from '../buttonClasses.js'
 import NavigationList from './NavigationList.jsx'
+import ShellPanel from './ShellPanel.jsx'
 
 // Matches Tailwind's `lg` breakpoint, where the persistent sidebar appears.
 const DESKTOP_MEDIA_QUERY = '(min-width: 64rem)'
@@ -10,7 +12,7 @@ const DESKTOP_MEDIA_QUERY = '(min-width: 64rem)'
  * which provides focus containment, Escape handling, an inert
  * background and focus restoration on close.
  */
-function NavigationDrawer({ open, onClose }) {
+function NavigationDrawer({ open, onClose, footer }) {
   const dialogRef = useRef(null)
 
   useEffect(() => {
@@ -46,11 +48,7 @@ function NavigationDrawer({ open, onClose }) {
       <div className="flex h-full flex-col border-r border-border bg-surface shadow-2xl">
         <div className="flex min-h-14 items-center justify-between gap-2 border-b border-border px-4">
           <BrandMark />
-          <button
-            type="button"
-            onClick={onClose}
-            className="inline-flex size-11 items-center justify-center rounded-md text-muted transition-colors duration-150 hover:bg-raised hover:text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent motion-reduce:transition-none"
-          >
+          <button type="button" onClick={onClose} className={buttonClasses.icon}>
             <span className="sr-only">Close navigation</span>
             <svg
               viewBox="0 0 24 24"
@@ -69,6 +67,7 @@ function NavigationDrawer({ open, onClose }) {
         <nav aria-label="Primary" className="flex-1 overflow-y-auto p-3">
           <NavigationList onNavigate={onClose} />
         </nav>
+        <ShellPanel>{footer}</ShellPanel>
       </div>
     </dialog>
   )
