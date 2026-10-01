@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import ConfirmDialog from '../../components/ConfirmDialog.jsx'
 import DataState from '../../components/DataState.jsx'
 import MetricValue from '../../components/MetricValue.jsx'
+import Picker from '../../components/Picker.jsx'
 import Panel from '../../components/Panel.jsx'
 import { buttonClasses } from '../../components/buttonClasses.js'
 import { sourceById, sources } from '../../config/sources.config.js'
@@ -18,7 +19,6 @@ const inputClass =
 /** Manual input cost/day update (FR-HMI-002). Meaning of the value is TBD. */
 function InputCostControl({ live }) {
   const control = useControlState()
-  const sourceId = useId()
   const valueId = useId()
   const errorId = useId()
   const [source, setSource] = useState('grid')
@@ -58,14 +58,13 @@ function InputCostControl({ live }) {
                 ))}
               </dl>
               <fieldset disabled={blocked} className="grid gap-3 sm:grid-cols-2">
-                <div className="grid gap-1">
-                  <label htmlFor={sourceId} className="text-xs text-muted">Source</label>
-                  <select id={sourceId} value={source} onChange={(e) => setSource(e.target.value)} className={inputClass}>
-                    {sources.map((s) => (
-                      <option key={s.id} value={s.id}>{s.longLabel}</option>
-                    ))}
-                  </select>
-                </div>
+                <Picker
+                  label="Source"
+                  value={source}
+                  disabled={blocked}
+                  options={sources.map((s) => ({ value: s.id, label: s.longLabel }))}
+                  onChange={setSource}
+                />
                 <div className="grid gap-1">
                   <label htmlFor={valueId} className="text-xs text-muted">
                     New cost per day ({current?.currency ?? 'currency TBD'})

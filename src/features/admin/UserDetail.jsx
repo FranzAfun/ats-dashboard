@@ -1,6 +1,8 @@
-import { useCallback, useId } from 'react'
+import { useCallback } from 'react'
 import DataState from '../../components/DataState.jsx'
 import LoadingState from '../../components/LoadingState.jsx'
+import Picker from '../../components/Picker.jsx'
+import { useStableLoading } from '../../hooks/useStableLoading.js'
 import StatusIndicator from '../../components/StatusIndicator.jsx'
 import { features, permissions } from '../../config/access.config.js'
 import { useAccess } from '../../hooks/useAccess.js'
@@ -9,8 +11,11 @@ import { useMutation } from '../../hooks/useMutation.js'
 import { adminService } from '../../services/auth/adminService.js'
 import MutationError from './MutationError.jsx'
 
-const selectClass =
-  'min-h-11 w-full rounded-md border border-control bg-canvas px-2 text-sm text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60'
+const overrideOptions = [
+  { value: 'inherit', label: 'Role default' },
+  { value: 'grant', label: 'Granted' },
+  { value: 'revoke', label: 'Revoked' },
+]
 
 function overrideFor(user, featureId) {
   if (user.featuresGranted?.includes(featureId)) return 'grant'
@@ -34,13 +39,13 @@ function withOverride(user, featureId, mode) {
  */
 function UserDetail({ user, roleOptions, refreshing }) {
   const { canPerform, user: me } = useAccess()
-  const roleId = useId()
   const isSelf = user.id === me?.id
   const canManageUser = canPerform('admin.users.manage') && !isSelf
   const canManageFeatures = canPerform('admin.features.manage') && !isSelf
   const mutation = useMutation()
   // Keep controls disabled until refreshed data confirms the change.
   const busy = mutation.saving || refreshing
+  const { showLoader: showUpdating } = useStableLoading(busy)
   const loadAccess = useCallback(() => adminService.getEffectiveAccess(user.id), [user.id])
   const effective = useAdminData(loadAccess, `effective:${user.id}`)
 
@@ -52,20 +57,13 @@ function UserDetail({ user, roleOptions, refreshing }) {
         <section className="grid gap-3">
           <h3 className="text-xs font-semibold tracking-wide text-muted uppercase">Account</h3>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="grid gap-1">
-              <label htmlFor={roleId} className="text-xs text-muted">Role</label>
-              <select
-                id={roleId}
-                className={selectClass}
-                value={user.role}
-                disabled={busy}
-                onChange={(e) => mutation.mutate(() => adminService.updateUser(user.id, { role: e.target.value }))}
-              >
-                {roleOptions.map((role) => (
-                  <option key={role.id} value={role.id}>{role.label}</option>
-                ))}
-              </select>
-            </div>
+            <Picker
+              label="Role"
+              value={user.role}
+              disabled={busy}
+              options={roleOptions.map((role) => ({ value: role.id, label: role.label }))}
+              onChange={(role) => mutation.mutate(() => adminService.updateUser(user.id, { role }))}
+            />
             <div className="grid gap-1">
               <span className="text-xs text-muted">Status</span>
               <button
@@ -97,28 +95,23 @@ function UserDetail({ user, roleOptions, refreshing }) {
           </p>
           <ul className="grid gap-2 sm:grid-cols-2">
             {features.map((feature) => (
-              <li key={feature.id} className="grid gap-1">
-                <label htmlFor={`${user.id}-${feature.id}`} className="text-xs text-muted">{feature.label}</label>
-                <select
-                  id={`${user.id}-${feature.id}`}
-                  className={selectClass}
+              <li key={feature.id}>
+                <Picker
+                  label={feature.label}
                   value={overrideFor(user, feature.id)}
                   disabled={busy}
-                  onChange={(e) =>
-                    mutation.mutate(() => adminService.updateUser(user.id, withOverride(user, feature.id, e.target.value)))
+                  options={overrideOptions}
+                  onChange={(mode) =>
+                    mutation.mutate(() => adminService.updateUser(user.id, withOverride(user, feature.id, mode)))
                   }
-                >
-                  <option value="inherit">Role default</option>
-                  <option value="grant">Granted</option>
-                  <option value="revoke">Revoked</option>
-                </select>
+                />
               </li>
             ))}
           </ul>
         </section>
       )}
 
-      {busy && <LoadingState size="inline" orb="working" message="Updating…" />}
+      {showUpdating && <LoadingState size="inline" orb="working" message="Updating…" />}
       <MutationError error={mutation.error} />
 
       <section className="grid gap-2">
