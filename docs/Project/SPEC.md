@@ -1,0 +1,825 @@
+# ATS Dashboard Specification
+
+## 1. Project Purpose
+
+Build a responsive custom web dashboard for the Automatic Transfer
+System (ATS) and energy-management project.
+
+The application will provide:
+
+-   live system information
+-   power-source telemetry
+-   financial and energy analytics
+-   condition awareness
+-   HMI remote controls
+-   user/role/permission management
+-   feature-based access control
+-   responsive desktop, tablet, and mobile interfaces
+-   polished, purposeful motion and animation
+
+The dashboard is an application layer around the existing Node-RED/ATS
+system. It must not invent or hardcode production telemetry.
+
+------------------------------------------------------------------------
+
+## 2. Technology Stack
+
+### Frontend
+
+-   React
+-   Vite
+-   JavaScript
+-   Tailwind CSS
+
+### Explicitly not used
+
+-   TypeScript
+-   Bootstrap
+-   jQuery
+
+Use JavaScript files such as `.js` and `.jsx`.
+
+------------------------------------------------------------------------
+
+## 3. Existing System Integration
+
+The existing ATS system uses:
+
+-   Modbus TCP for temperature and contactor coil status
+-   MQTT for PZEM-004T sensor data
+-   Node-RED as the existing processing/control layer
+
+The existing Node-RED flow contains a `/ws/telemetry` WebSocket section,
+but this is **not confirmed as the frontend integration method**.
+
+The application must therefore use an integration adapter/transport
+abstraction rather than coupling React directly to an assumed transport.
+
+The final transport may be:
+
+-   HTTP/REST
+-   WebSocket
+-   SSE
+-   another supported interface
+
+The decision must be based on the actual integration contract
+established with the existing system.
+
+------------------------------------------------------------------------
+
+# 4. Dashboard Scope
+
+## 4.1 Home Dashboard
+
+The home dashboard should support:
+
+-   live tariff
+-   temperature monitoring
+-   source/status indicators
+-   HMI remote control
+-   animated power-flow diagram
+-   important alerts
+-   current system summary
+
+The dashboard itself is a standard/core page.
+
+However, individual dashboard sections and data are feature-dependent.
+
+If a user does not have access to a dashboard feature:
+
+-   the section must not render
+-   its data must not unnecessarily be fetched
+-   related actions must not be shown
+
+If the feature is granted:
+
+-   the relevant section becomes available according to the user's
+    permissions.
+
+------------------------------------------------------------------------
+
+## 4.2 Power Parameters
+
+Support telemetry for:
+
+-   load
+-   generator
+-   grid
+-   solar
+
+Possible measurements include:
+
+-   voltage
+-   current
+-   power
+-   energy
+-   frequency
+-   power factor
+-   source status
+-   temperature where applicable
+
+The exact production payload must come from the integration contract.
+
+------------------------------------------------------------------------
+
+## 4.3 Financial Analytics
+
+Support:
+
+-   source usage percentage
+-   ATS transition metrics
+-   live tariff information
+-   active source
+-   energy consumption
+-   cost trend graphs
+-   daily cost trend
+-   monthly cost trend
+-   yearly cost trend
+-   energy-source costs
+-   power-factor losses
+-   data export
+
+Do not fabricate financial telemetry.
+
+Mock/demo values are allowed during development, but must be clearly
+isolated from production integration.
+
+------------------------------------------------------------------------
+
+## 4.4 Condition Awareness
+
+Support:
+
+-   live alarm banner
+-   visual alerts
+-   system condition indicators
+-   connection/integration warnings
+-   source/ATS warnings where supported by the system
+
+------------------------------------------------------------------------
+
+## 4.5 HMI Remote Control
+
+Authorized users may perform supported HMI actions such as:
+
+-   changing the active source/input
+-   changing input cost/day
+
+Commands must go through the application integration layer.
+
+React must never directly communicate with field devices.
+
+Every command must have:
+
+1.  permission check
+2.  feature check where applicable
+3.  validation
+4.  command submission
+5.  processing state
+6.  success/failure result
+7.  user-visible feedback
+
+------------------------------------------------------------------------
+
+# 5. Authentication, Roles, Permissions and Features
+
+## 5.1 Users
+
+The system supports individual user accounts.
+
+## 5.2 Roles
+
+Initial proposed roles:
+
+-   Admin
+-   Operator
+-   Viewer
+
+The final role model may expand after requirements are confirmed.
+
+## 5.3 Permissions
+
+Permissions should be granular.
+
+Examples:
+
+-   `dashboard.view`
+-   `power.view`
+-   `financial.view`
+-   `financial.export`
+-   `alerts.view`
+-   `hmi.view`
+-   `hmi.changeSource`
+-   `hmi.changeCost`
+-   `admin.users`
+-   `admin.features`
+-   `admin.permissions`
+
+## 5.4 Page Access
+
+If a user does not have access to a page:
+
+-   hide the navigation item
+-   prevent direct route access
+
+## 5.5 Action Access
+
+A user may have access to a page without having permission to perform
+every action on that page.
+
+Example:
+
+A user may view HMI information but not change the active source.
+
+In this case:
+
+-   the HMI page remains visible
+-   the source-change control is hidden
+
+Do not show disabled controls when the requirement is to hide
+unauthorized actions.
+
+## 5.6 Feature Flags
+
+Feature access is managed from the Admin module.
+
+Only authorized administrators can manage feature access.
+
+Feature flags may control:
+
+-   dashboard sections
+-   analytics sections
+-   HMI capabilities
+-   advanced alerts
+-   exports
+-   other optional application features
+
+The effective UI is determined by:
+
+**user + role + permission + feature access**
+
+UI visibility is not a security boundary. Backend/integration
+authorization must still enforce the same rules.
+
+------------------------------------------------------------------------
+
+# 6. Responsive Design Requirement
+
+Responsiveness is a first-class requirement.
+
+The application must be designed for:
+
+-   desktop
+-   laptop
+-   tablet
+-   small tablets
+-   mobile phones
+-   small mobile screens
+
+Do not build desktop-first layouts that merely shrink.
+
+Use responsive layouts intentionally.
+
+Important areas include:
+
+-   navigation
+-   dashboard cards
+-   telemetry tables
+-   charts
+-   power-flow diagram
+-   HMI controls
+-   modals
+-   dropdowns
+-   admin user management
+-   permission management
+-   feature management
+-   alerts
+-   data export controls
+
+Charts and complex visualizations must remain usable on small screens.
+
+Touch targets must be appropriate for mobile use.
+
+------------------------------------------------------------------------
+
+# 7. Animation and Motion System
+
+Animation is a deliberate part of the product design.
+
+The interface should feel polished and alive without becoming
+distracting or resembling a generic template.
+
+Two external resources are approved references for reusable animation
+patterns:
+
+## 7.1 Transitions.dev
+
+Repository:
+
+https://github.com/Jakubantalik/transitions.dev
+
+Library:
+
+https://transitions.dev/library.html
+
+The repository's license states that the free transitions and skills can
+be used in unlimited personal and commercial projects, modified, and
+shipped as part of another product. The transition library itself must
+not be redistributed as a competing library or template collection.
+
+Use the free transition patterns where appropriate.
+
+Useful categories include:
+
+-   card resize
+-   number pop-in
+-   notification badge
+-   text-state swaps
+-   dropdown/menu transitions
+-   modal open/close
+-   panel reveal
+-   page transitions
+-   icon swaps
+-   success states
+-   error states
+-   tabs
+-   skeleton/reveal
+-   spinner-to-check
+-   toggles
+-   tooltips
+-   shimmer effects
+-   thinking states
+-   other suitable free transitions
+
+Do not copy the transitions.dev website branding, visual identity, or
+website design.
+
+Use the transition ideas/components as part of this product's own visual
+system.
+
+### Recommended usage
+
+Use transitions for:
+
+-   navigation changes
+-   page entry/exit
+-   card expansion
+-   chart/data updates
+-   number changes
+-   dropdown opening
+-   modal opening
+-   toast/notification entry
+-   success/failure feedback
+-   tab changes
+-   loading/skeleton states
+-   button/icon state changes
+-   status changes
+
+Do not animate every element simply because animation is available.
+
+------------------------------------------------------------------------
+
+# 8. Thinking Orbs
+
+Repository:
+
+https://github.com/RareFormLabs/thinking-orbs
+
+The library is suitable for this project and provides nine animated
+states:
+
+-   `working`
+-   `searching`
+-   `solving`
+-   `listening`
+-   `connecting`
+-   `weaving`
+-   `composing`
+-   `breathing`
+-   `shaping`
+
+It uses a plain 2D canvas renderer and supports:
+
+-   automatic light/dark theme handling
+-   reduced-motion behavior
+-   off-screen pausing
+-   hidden-tab pausing
+-   device-pixel-ratio limiting
+-   accessible labels
+
+Use Thinking Orbs where the interface is communicating an asynchronous
+or processing state.
+
+### Appropriate use cases
+
+Examples:
+
+-   loading system data
+-   processing telemetry
+-   connecting to the ATS integration
+-   reconnecting to Node-RED/integration services
+-   processing an HMI command
+-   calculating analytics
+-   exporting data
+-   applying configuration
+-   waiting for a system response
+-   background analysis
+-   system initialization
+
+Map the visual state to the meaning of the operation.
+
+For example:
+
+-   `connecting` → connection establishment
+-   `searching` → retrieving/searching for data
+-   `working` → general processing
+-   `solving` → analysis/calculation
+-   `listening` → waiting/listening for system data
+-   `composing` → preparing output/export
+-   `breathing` → calm ongoing processing
+-   `shaping` → system/data transformation
+-   `weaving` → combining multiple data streams
+
+The exact mapping may be refined during implementation.
+
+------------------------------------------------------------------------
+
+# 9. Animation Usage Rules
+
+Animation must serve meaning.
+
+### Use animation for
+
+-   state changes
+-   feedback
+-   processing
+-   loading
+-   navigation
+-   data updates
+-   visual hierarchy
+-   system activity
+-   interaction confirmation
+
+### Avoid animation for
+
+-   critical controls that must be immediately readable
+-   safety-critical information
+-   constantly moving decorative backgrounds
+-   every card on every render
+-   unnecessary looping animations
+-   anything that makes telemetry difficult to read
+
+The power-flow visualization may use continuous motion because it
+represents energy movement.
+
+Other continuous animation must have a clear reason.
+
+------------------------------------------------------------------------
+
+# 10. Motion Accessibility
+
+Every animated feature must respect:
+
+`prefers-reduced-motion`
+
+When reduced motion is enabled:
+
+-   remove non-essential motion
+-   use static states where possible
+-   preserve information
+-   preserve usability
+-   do not remove critical status feedback
+
+Thinking Orbs already provides reduced-motion behavior and should retain
+that behavior.
+
+Transition implementations must also include appropriate reduced-motion
+handling.
+
+------------------------------------------------------------------------
+
+# 11. Animation Performance
+
+Animation must remain performant on:
+
+-   modern desktop browsers
+-   normal laptops
+-   tablets
+-   mid-range mobile devices
+-   small mobile screens
+
+Prefer:
+
+-   CSS transforms
+-   CSS opacity
+-   efficient canvas rendering
+-   GPU-friendly transforms where appropriate
+-   limited DOM work
+-   avoiding layout-triggering animations
+-   avoiding unnecessary React re-renders
+
+Do not introduce a large animation dependency merely for a small visual
+effect.
+
+Measure before adding heavy animation tooling.
+
+------------------------------------------------------------------------
+
+# 12. Animation Architecture
+
+Animations should be treated as a reusable application layer.
+
+Proposed structure:
+
+``` text
+src/
+  animations/
+    transitions/
+    thinking-orbs/
+    motion.js
+    animationConfig.js
+```
+
+The exact structure may change during implementation.
+
+Create reusable wrappers instead of scattering animation implementation
+throughout pages.
+
+Examples:
+
+``` text
+AnimatedCard
+AnimatedNumber
+AnimatedPanel
+AnimatedModal
+AnimatedDropdown
+AnimatedStatus
+ThinkingStatus
+PageTransition
+```
+
+These are conceptual components. Create only when they provide real
+reuse.
+
+------------------------------------------------------------------------
+
+# 13. Power Flow Animation
+
+The animated power-flow diagram is a core dashboard visualization.
+
+It should communicate:
+
+-   available sources
+-   active source
+-   energy direction
+-   switching
+-   source transitions
+-   load connection
+-   system state
+
+The animation must remain readable.
+
+It must not depend on an unrelated external animation library if a
+custom visualization is more appropriate.
+
+Possible visual behavior:
+
+-   moving energy particles
+-   directional flow
+-   active-source highlighting
+-   transition animation
+-   source connection/disconnection
+-   fault/interruption indication
+
+The exact visual implementation is a design/engineering task and should
+be validated on mobile as well as desktop.
+
+------------------------------------------------------------------------
+
+# 14. Loading and Processing States
+
+Loading states should be intentional.
+
+Use:
+
+-   skeletons for content-heavy layouts
+-   Thinking Orbs for meaningful processing/connection states
+-   simple spinners only when appropriate
+-   transitions when content enters or changes
+
+Avoid showing a spinner for every tiny operation.
+
+Long-running operations should communicate what is happening.
+
+Example:
+
+``` text
+Connecting to ATS...
+Retrieving live telemetry...
+Processing source transition...
+Calculating financial analytics...
+Exporting report...
+```
+
+The message and animation should communicate the same state.
+
+------------------------------------------------------------------------
+
+# 15. Data Rules
+
+Production telemetry must never be hardcoded into UI components.
+
+Use:
+
+``` text
+integration data
+      ↓
+adapter
+      ↓
+application data model
+      ↓
+state layer
+      ↓
+components
+```
+
+Mock data is permitted for development.
+
+Mock data must:
+
+-   live separately from production integration
+-   follow the same data structures
+-   be switchable
+-   never silently become production data
+
+------------------------------------------------------------------------
+
+# 16. Integration Rules
+
+The React application must not directly access:
+
+-   PLCs
+-   PZEM devices
+-   Modbus devices
+-   MQTT devices
+-   field hardware
+
+The integration layer is responsible for communication with the existing
+system.
+
+The frontend communicates with the application integration boundary.
+
+This allows the transport to change without rewriting the UI.
+
+------------------------------------------------------------------------
+
+# 17. Real-Time Data
+
+The system should support real-time or near-real-time updates where
+required.
+
+Potential data includes:
+
+-   active source
+-   voltage
+-   current
+-   power
+-   energy
+-   frequency
+-   power factor
+-   temperature
+-   tariff
+-   alarms
+-   source status
+-   transition status
+
+The actual update frequency must be determined from the existing system
+and integration contract.
+
+Do not invent telemetry frequency.
+
+------------------------------------------------------------------------
+
+# 18. Error Handling
+
+The interface must clearly handle:
+
+-   integration unavailable
+-   stale telemetry
+-   failed commands
+-   invalid commands
+-   authorization failures
+-   feature unavailable
+-   authentication failures
+-   network failures
+-   partial data
+-   missing data
+
+Errors should be visible without destroying the entire dashboard.
+
+Use appropriate motion for error feedback, but never make critical
+errors dependent on animation.
+
+------------------------------------------------------------------------
+
+# 19. Admin Module
+
+Admin functionality includes:
+
+-   user management
+-   role management
+-   permission management
+-   feature management
+-   access configuration
+
+Only authorized administrators can manage these areas.
+
+The Admin UI must also be responsive.
+
+Tables should transform appropriately on smaller screens rather than
+forcing users to horizontally scroll through an enormous desktop table
+unless horizontal scrolling is genuinely the most usable solution.
+
+------------------------------------------------------------------------
+
+# 20. Development Rules
+
+Before implementing a feature:
+
+1.  Read the project documentation.
+2.  Check whether the required data/behavior is confirmed.
+3.  Do not invent production integration details.
+4.  Use the existing application data contract.
+5.  Check permissions and feature access.
+6.  Check responsive behavior.
+7.  Check whether an existing animation component can be reused.
+8.  Respect reduced-motion requirements.
+9.  Keep mock and production integration separate.
+10. Test the feature before moving to the next one.
+
+When a technical decision changes, update the relevant specification
+before continuing.
+
+------------------------------------------------------------------------
+
+# 21. Definition of Done
+
+A feature is not complete until:
+
+-   desktop layout works
+-   mobile layout works
+-   small-screen layout works
+-   permissions are respected
+-   feature flags are respected where applicable
+-   loading states exist
+-   error states exist
+-   appropriate animation exists where useful
+-   reduced-motion behavior works
+-   production data is not hardcoded
+-   mock data remains separated
+-   integration boundaries are respected
+-   no unnecessary dependencies were introduced
+-   the application builds successfully
+-   relevant tests pass
+
+------------------------------------------------------------------------
+
+# 22. External References
+
+### Transitions.dev
+
+Repository:
+
+https://github.com/Jakubantalik/transitions.dev
+
+Library:
+
+https://transitions.dev/library.html
+
+License:
+
+https://github.com/Jakubantalik/transitions.dev/blob/main/LICENSE
+
+### Thinking Orbs
+
+Repository:
+
+https://github.com/RareFormLabs/thinking-orbs
+
+Use the official repositories as the source of truth for current
+installation/API details during implementation.
+
+------------------------------------------------------------------------
+
+# 23. Important Principle
+
+The goal is not to make the dashboard animated for the sake of
+animation.
+
+The goal is:
+
+**A serious energy-management dashboard with excellent visual feedback,
+meaningful motion, strong responsiveness, clear system states, and a
+polished modern interface.**
+
+Animation should make the system easier to understand, not harder.
